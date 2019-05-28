@@ -313,7 +313,7 @@ static void rtl8703bs_recv_tasklet(void *priv)
 
 				if (pattrib->pkt_rpt_type == NORMAL_RX) {
 					// skip the rx packet with abnormal length
-					if (pattrib->pkt_len < 14 || pattrib->pkt_len > 8192) {	
+					if (pattrib->pkt_len < 14 || pattrib->pkt_len > 8192) {
 						DBG_8192C("skip abnormal rx packet(%d)\n", pattrib->pkt_len);
 						rtw_free_recvframe(precvframe, &precvpriv->free_recv_queue);
 						break;
@@ -421,7 +421,7 @@ static void rtl8703bs_recv_tasklet(void *priv)
 						DBG_871X("%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:\n", *(pptr+i),
 						*(pptr+i+1), *(pptr+i+2) ,*(pptr+i+3) ,*(pptr+i+4),*(pptr+i+5), *(pptr+i+6), *(pptr+i+7), *(pptr+i+8), *(pptr+i+9), *(pptr+i+10),
 						 *(pptr+i+11), *(pptr+i+12), *(pptr+i+13), *(pptr+i+14), *(pptr+i+15));
-					
+
 					if(pattrib->pkt_len < 100)
 						len = pattrib->pkt_len;
 					pptr = ptr + RXDESC_SIZE + pattrib->drvinfo_sz;

@@ -1721,7 +1721,7 @@ void halbtc8723b2ant_action_bt_inquiry(IN struct btc_coexist *btcoexist)
 	if (coex_sta->bt_abnormal_scan) {
 		halbtc8723b2ant_ps_tdma(btcoexist, NORMAL_EXEC, true,
 						23);
-		halbtc8723b2ant_coex_table_with_type(btcoexist, NORMAL_EXEC, 3);				
+		halbtc8723b2ant_coex_table_with_type(btcoexist, NORMAL_EXEC, 3);
 	} else if (scan || link || roam) {
 		BTC_SPRINTF(trace_buf, BT_TMP_BUF_SIZE,
 			    "[BTCoex], Wifi link process + BT Inq/Page!!\n");
@@ -1954,7 +1954,7 @@ boolean halbtc8723b2ant_is_common_action(IN struct btc_coexist *btcoexist)
 				BTC_TRACE(trace_buf);
 				/* btcoexist->btc_get(btcoexist,
 					BTC_GET_BL_IS_ASUS_8723B, &asus_8723b);
-				if (!asus_8723b) 
+				if (!asus_8723b)
 					common = false;
 				else
 					common = halbtc8723b2ant_action_wifi_idle_process(
@@ -4175,7 +4175,7 @@ void ex_halbtc8723b2ant_display_coex_info(IN struct btc_coexist *btcoexist)
 		   "BT Abnormal scan",
 		   (coex_sta->bt_abnormal_scan) ? "Yes" : "No");
 	CL_PRINTF(cli_buf);
-	
+
 	pop_report_in_10s++;
 	CL_SPRINTF(cli_buf, BT_TMP_BUF_SIZE, "\r\n %-35s = [%s/ %d/ %d/ %d] ",
 		   "BT [status/ rssi/ retryCnt/ popCnt]",

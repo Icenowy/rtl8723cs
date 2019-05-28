@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2013 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -87,7 +87,7 @@
 	/* Monitor mode */
 	#include <net/ieee80211_radiotap.h>
 
-#ifdef CONFIG_IOCTL_CFG80211	
+#ifdef CONFIG_IOCTL_CFG80211
 /*	#include <linux/ieee80211.h> */
 	#include <net/cfg80211.h>
 #endif //CONFIG_IOCTL_CFG80211
@@ -149,20 +149,20 @@
 #endif
 
 	struct	__queue	{
-		struct	list_head	queue;	
+		struct	list_head	queue;
 		_lock	lock;
 	};
 
 	typedef	struct sk_buff	_pkt;
 	typedef unsigned char	_buffer;
-	
+
 	typedef struct	__queue	_queue;
 	typedef struct	list_head	_list;
 	typedef	int	_OS_STATUS;
 	//typedef u32	_irqL;
 	typedef unsigned long _irqL;
 	typedef	struct	net_device * _nic_hdl;
-	
+
 	typedef void*		_thread_hdl_;
 	typedef int		thread_return;
 	typedef void*	thread_context;
@@ -208,18 +208,18 @@ static inline unsigned char *skb_end_pointer(const struct sk_buff *skb)
 __inline static _list *get_next(_list	*list)
 {
 	return list->next;
-}	
+}
 
 __inline static _list	*get_list_head(_queue	*queue)
 {
 	return (&(queue->queue));
 }
 
-	
-#define LIST_CONTAINOR(ptr, type, member) \
-        ((type *)((char *)(ptr)-(SIZE_T)(&((type *)0)->member)))	
 
-        
+#define LIST_CONTAINOR(ptr, type, member) \
+        ((type *)((char *)(ptr)-(SIZE_T)(&((type *)0)->member)))
+
+
 __inline static void _enter_critical(_lock *plock, _irqL *pirqL)
 {
 	spin_lock_irqsave(plock, *pirqL);
@@ -289,7 +289,7 @@ static void legacy_timer_emu_func(struct timer_list *t)
 
 __inline static void _init_timer(_timer *ptimer,_nic_hdl nic_hdl,void *pfunc,void* cntx)
 {
-	//setup_timer(ptimer, pfunc,(u32)cntx);	
+	//setup_timer(ptimer, pfunc,(u32)cntx);
 	ptimer->function = pfunc;
 	ptimer->data = (unsigned long)cntx;
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0))
@@ -300,7 +300,7 @@ __inline static void _init_timer(_timer *ptimer,_nic_hdl nic_hdl,void *pfunc,voi
 }
 
 __inline static void _set_timer(_timer *ptimer,u32 delay_time)
-{	
+{
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0))
 	mod_timer(&ptimer->t, (jiffies+(delay_time*HZ/1000)));
 #else

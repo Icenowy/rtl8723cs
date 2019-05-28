@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -26,11 +26,11 @@
 /*#define ANTDIV_VERSION	"2.2"  2015.01.16  Dino*/
 /*#define ANTDIV_VERSION	"3.1"  2015.07.29  YuChen, remove 92c 92d 8723a*/
 /*#define ANTDIV_VERSION	"3.2"  2015.08.11  Stanley, disable antenna diversity when BT is enable for 8723B*/
-#define ANTDIV_VERSION	"3.3"  /*2015.08.12  Stanley. 8723B does not need to check the antenna is control by BT, 
+#define ANTDIV_VERSION	"3.3"  /*2015.08.12  Stanley. 8723B does not need to check the antenna is control by BT,
 because antenna diversity only works when BT is disable or radio off*/
 
 //1 ============================================================
-//1  Definition 
+//1  Definition
 //1 ============================================================
 
 #define	ANTDIV_INIT		0xff
@@ -132,7 +132,7 @@ typedef struct _SW_Antenna_Switch_
 	u1Byte		TestMode;
 	u1Byte		bTriggerAntennaSwitch;
 	u1Byte		SelectAntennaMap;
-	u1Byte		RSSI_target;	
+	u1Byte		RSSI_target;
 	u1Byte 		reset_idx;
 	u2Byte		Single_Ant_Counter;
 	u2Byte		Dual_Ant_Counter;
@@ -147,7 +147,7 @@ typedef struct _SW_Antenna_Switch_
 	BOOLEAN		ANTA_ON;	//To indicate Ant A is or not
 	BOOLEAN		ANTB_ON;	//To indicate Ant B is on or not
 	BOOLEAN		Pre_Aux_FailDetec;
-	BOOLEAN		RSSI_AntDect_bResult;	
+	BOOLEAN		RSSI_AntDect_bResult;
 	u1Byte		Ant5G;
 	u1Byte		Ant2G;
 
@@ -172,11 +172,11 @@ typedef struct _SW_Antenna_Switch_
 	BOOLEAN		bSWAntDivByCtrlFrame;
 #endif
 
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)	
+#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
 	#if USE_WORKITEM
 	RT_WORK_ITEM			SwAntennaSwitchWorkitem;
-	#if (RTL8723B_SUPPORT == 1) || (RTL8821A_SUPPORT == 1)	
-	RT_WORK_ITEM			SwAntennaSwitchWorkitem_8723B;	
+	#if (RTL8723B_SUPPORT == 1) || (RTL8821A_SUPPORT == 1)
+	RT_WORK_ITEM			SwAntennaSwitchWorkitem_8723B;
 	#endif
 	#endif
 #endif
@@ -195,7 +195,7 @@ typedef struct _SW_Antenna_Switch_
 	u1Byte		RxIdleAnt;
 
 #endif
-	
+
 }SWAT_T, *pSWAT_T;
 
 
@@ -221,12 +221,12 @@ typedef struct _BF_DIV_COEX_
 	u1Byte pre_num_Client;
 	u1Byte num_BfTar;
 	u1Byte num_DivTar;
-	
+
 	BOOLEAN bAll_DivSta_Idle;
 	BOOLEAN bAll_BFSta_Idle;
 	BOOLEAN BDC_Try_flag;
 	BOOLEAN BF_pass;
-	BOOLEAN DIV_pass;	
+	BOOLEAN DIV_pass;
 }BDC_T,*pBDC_T;
 #endif
 #endif
@@ -247,7 +247,7 @@ typedef struct _SMART_ANTENNA_TRAINNING_ {
 	u1Byte	decision_holding_period;
 	u4Byte	pkt_counter;
 	u4Byte	fast_training_beam_num;
-	u4Byte	pre_fast_training_beam_num;	
+	u4Byte	pre_fast_training_beam_num;
 	u4Byte	pkt_rssi_pre[SUPPORT_RF_PATH_NUM][SUPPORT_BEAM_PATTERN_NUM];
 	u4Byte	pkt_rssi_sum[8][SUPPORT_BEAM_PATTERN_NUM];
 	u4Byte	pkt_rssi_cnt[8][SUPPORT_BEAM_PATTERN_NUM];
@@ -255,9 +255,9 @@ typedef struct _SMART_ANTENNA_TRAINNING_ {
 	u4Byte	pre_codeword;
 	BOOLEAN	force_update_beam_en;
 
-	#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)	
+	#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
 	RT_WORK_ITEM	hl_smart_antenna_workitem;
-	RT_WORK_ITEM	hl_smart_antenna_decision_workitem;	
+	RT_WORK_ITEM	hl_smart_antenna_decision_workitem;
 	#endif
 
 } SAT_T, *pSAT_T;
@@ -290,7 +290,7 @@ typedef struct _FAST_ANTENNA_TRAINNING_
 	u1Byte	idx_AntDiv_counter_5G;
 	u1Byte	AntDiv_2G_5G;
 	u4Byte    CCK_counter_main;
-	u4Byte    CCK_counter_aux;	
+	u4Byte    CCK_counter_aux;
 	u4Byte    OFDM_counter_main;
 	u4Byte    OFDM_counter_aux;
 
@@ -305,7 +305,7 @@ typedef struct _FAST_ANTENNA_TRAINNING_
 	u1Byte	TargetAnt_enhance;
 	u1Byte	pre_TargetAnt_enhance;
 	u2Byte	Main_MPDU_OK_cnt;
-	u2Byte	Aux_MPDU_OK_cnt;	
+	u2Byte	Aux_MPDU_OK_cnt;
 
 	u4Byte	CRC32_Ok_Cnt;
 	u4Byte	CRC32_Fail_Cnt;
@@ -313,7 +313,7 @@ typedef struct _FAST_ANTENNA_TRAINNING_
 	u4Byte	AuxCRC32_Ok_Cnt;
 	u4Byte	MainCRC32_Fail_Cnt;
 	u4Byte	AuxCRC32_Fail_Cnt;
-	#endif	
+	#endif
 	#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN|ODM_CE))
 	u4Byte    CCK_CtrlFrame_Cnt_main;
 	u4Byte    CCK_CtrlFrame_Cnt_aux;
@@ -347,7 +347,7 @@ typedef enum _FAT_STATE /*Fast antenna training*/
 
 typedef enum _ANT_DIV_TYPE
 {
-	NO_ANTDIV			= 0xFF,	
+	NO_ANTDIV			= 0xFF,
 	CG_TRX_HW_ANTDIV		= 0x01,
 	CGCS_RX_HW_ANTDIV 	= 0x02,
 	FIXED_HW_ANTDIV		= 0x03,
@@ -375,7 +375,7 @@ ODM_SetAntConfig(
 
 
 #define SwAntDivRestAfterLink	ODM_SwAntDivRestAfterLink
-VOID ODM_SwAntDivRestAfterLink(	
+VOID ODM_SwAntDivRestAfterLink(
 	IN	PVOID	pDM_VOID
 	);
 
@@ -383,7 +383,7 @@ VOID ODM_SwAntDivRestAfterLink(
 
 VOID
 ODM_UpdateRxIdleAnt(
-	IN		PVOID		pDM_VOID, 
+	IN		PVOID		pDM_VOID,
 	IN		 u1Byte		Ant
 );
 
@@ -525,7 +525,7 @@ odm_AntselStatistics(
 );
 
 VOID
-ODM_Process_RSSIForAntDiv(	
+ODM_Process_RSSIForAntDiv(
 	IN OUT	PVOID		pDM_VOID,
 	IN		PVOID		p_phy_info_void,
 	IN		PVOID		p_pkt_info_void
@@ -538,7 +538,7 @@ VOID
 ODM_SetTxAntByTxInfo(
 	IN		PVOID			pDM_VOID,
 	IN		pu1Byte			pDesc,
-	IN		u1Byte			macId	
+	IN		u1Byte			macId
 );
 
 #elif(DM_ODM_SUPPORT_TYPE == ODM_AP)
@@ -547,7 +547,7 @@ VOID
 ODM_SetTxAntByTxInfo(
 	struct	rtl8192cd_priv		*priv,
 	struct 	tx_desc			*pdesc,
-	unsigned short			aid	
+	unsigned short			aid
 );
 
 #endif
@@ -563,7 +563,7 @@ VOID
 ODM_UpdateRxIdleAnt_8723B(
 	IN		PVOID			pDM_VOID,
 	IN		u1Byte			Ant,
-	IN		u4Byte			DefaultAnt, 
+	IN		u4Byte			DefaultAnt,
 	IN		u4Byte			OptionalAnt
 );
 

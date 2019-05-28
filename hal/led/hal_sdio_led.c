@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2012 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -149,12 +149,12 @@ SwLedBlink1(
 	)
 {
 	_adapter				*padapter = pLed->padapter;
-	PHAL_DATA_TYPE		pHalData = GET_HAL_DATA(padapter);	
+	PHAL_DATA_TYPE		pHalData = GET_HAL_DATA(padapter);
 	struct led_priv		*ledpriv = &(padapter->ledpriv);
 	struct mlme_priv		*pmlmepriv = &(padapter->mlmepriv);
 	PLED_SDIO 			pLed1 = &(ledpriv->SwLed1);
 	u8					bStopBlinking = _FALSE;
-	
+
 	if(pHalData->CustomerID == RT_CID_819x_CAMEO)
 		pLed = &(ledpriv->SwLed1);
 
@@ -1020,7 +1020,7 @@ void BlinkHandler(PLED_SDIO	pLed)
 		, __func__
 		, rtw_is_drv_stopped(padapter)?"True":"False"
 		, rtw_is_surprise_removed(padapter)?"True":"False");
-		
+
 		return;
 	}
 
@@ -1029,22 +1029,22 @@ void BlinkHandler(PLED_SDIO	pLed)
 		case SW_LED_MODE0:
 			SwLedBlink(pLed);
 			break;
-		
+
 		case SW_LED_MODE1:
 			SwLedBlink1(pLed);
 			break;
-		
+
 		case SW_LED_MODE2:
 			SwLedBlink2(pLed);
 			break;
-			
+
 		case SW_LED_MODE3:
 			SwLedBlink3(pLed);
 			break;
 
 		case SW_LED_MODE4:
 			SwLedBlink4(pLed);
-			break;			
+			break;
 
 		case SW_LED_MODE5:
 			SwLedBlink5(pLed);
@@ -1063,7 +1063,7 @@ void BlinkHandler(PLED_SDIO	pLed)
 
 //
 //	Description:
-//		Callback function of LED BlinkTimer, 
+//		Callback function of LED BlinkTimer,
 //		it just schedules to corresponding BlinkWorkItem/led_blink_hdl
 //
 void BlinkTimerCallback(void *data)
@@ -1226,7 +1226,7 @@ SwLedControlMode1(
 	PLED_SDIO			pLed = &(ledpriv->SwLed0);
 	struct mlme_priv		*pmlmepriv = &(padapter->mlmepriv);
 	PHAL_DATA_TYPE		pHalData = GET_HAL_DATA(padapter);
-	
+
 	if(pHalData->CustomerID == RT_CID_819x_CAMEO)
 		pLed = &(ledpriv->SwLed1);
 
@@ -2369,7 +2369,7 @@ void ResetLedStatus(PLED_SDIO pLed) {
 
 	pLed->bLedBlinkInProgress = _FALSE; // true if it is blinking, false o.w..
 	pLed->bLedWPSBlinkInProgress = _FALSE;
-	
+
 	pLed->BlinkTimes = 0; // Number of times to toggle led state for blinking.
 	pLed->BlinkingLedState = LED_UNKNOWN; // Next state for blinking, either RTW_LED_ON or RTW_LED_OFF are.
 

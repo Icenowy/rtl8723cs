@@ -122,12 +122,12 @@ _BlockWrite(
 			break;
 		case 3:
 			remainFW[2]=*(p+2);
-		case 2: 	
+		case 2:
 			remainFW[1]=*(p+1);
-		case 1: 	
+		case 1:
 			remainFW[0]=*(p);
-			ret = rtw_write32(padapter, (FW_8703B_START_ADDRESS + blockCount_p1 * blockSize_p1), 
-				 le32_to_cpu(*(u32*)remainFW));	
+			ret = rtw_write32(padapter, (FW_8703B_START_ADDRESS + blockCount_p1 * blockSize_p1),
+				 le32_to_cpu(*(u32*)remainFW));
 		}
 		return ret;
 	}
@@ -292,7 +292,7 @@ void _8051Reset8703(PADAPTER padapter)
 	rtw_write8(padapter, REG_RSV_CTRL, io_rst&(~BIT1));
 #endif
 
-	// Enable 8051 IO wrapper	
+	// Enable 8051 IO wrapper
 	// 0x1c[8] = 1
 	io_rst = rtw_read8(padapter, REG_RSV_CTRL+1);
 	io_rst |= BIT(0);
@@ -526,15 +526,15 @@ int _WriteBTFWtoTxPktBuf8703B(
 	// 2. Adjust LLT table to an even boundary.
 	//---------------------------------------------------------
 #if 0//(DEV_BUS_TYPE == RT_SDIO_INTERFACE)
-	txpktbuf_bndy = 10; // rsvd page start address should be an even value. 														
+	txpktbuf_bndy = 10; // rsvd page start address should be an even value.
 	rtStatus =	InitLLTTable8703BS(Adapter, txpktbuf_bndy);
 	if(RT_STATUS_SUCCESS != rtStatus){
 		DBG_8192C("_CheckWLANFwPatchBTFwReady_8703B(): Failed to init LLT!\n");
 		return RT_STATUS_FAILURE;
 	}
-	
+
 	// Init Tx boundary.
-	PlatformEFIOWrite1Byte(Adapter, REG_DWBCN0_CTRL_8703B+1, (u1Byte)txpktbuf_bndy);	
+	PlatformEFIOWrite1Byte(Adapter, REG_DWBCN0_CTRL_8703B+1, (u1Byte)txpktbuf_bndy);
 #endif
 
 
@@ -589,7 +589,7 @@ int _WriteBTFWtoTxPktBuf8703B(
 
 			_rtw_memcpy( (u8*) (pmgntframe->buf_addr + txdesc_offset), ReservedPagePacket, FwBufLen);
 			DBG_871X("[%d]===>TotalPktLen + TXDESC_OFFSET TotalPacketLen:%d \n", DLBcnCount, (FwBufLen + txdesc_offset));
-			
+
 #ifdef CONFIG_PCI_HCI
 			dump_mgntframe(Adapter, pmgntframe);
 #else
@@ -612,7 +612,7 @@ int _WriteBTFWtoTxPktBuf8703B(
 		//DBG_871X("##0x208:%08x,0x210=%08x\n",PlatformEFIORead4Byte(Adapter, REG_TDECTRL),PlatformEFIORead4Byte(Adapter, 0x210));
 
 		PlatformEFIOWrite1Byte(Adapter, REG_TDECTRL+2,BcnValidReg);
-		
+
 	}while((!(BcnValidReg&BIT(0))) && DLBcnCount<5);
 
 
@@ -667,7 +667,7 @@ SetFwBTFwPatchCmd(
 	u8 addr1 = 0xa0;
 	u8 addr2 = 0x10;
 	u8 addr3 = 0x80;
-	
+
 	RT_TRACE(_module_mp_, _drv_notice_,("SetFwBTFwPatchCmd(): FwSize = %d\n", FwSize));
 
 	SET_8703B_H2CCMD_BT_FW_PATCH_SIZE(u1BTFwPatchParm, FwSize);
@@ -787,21 +787,21 @@ int ReservedPage_Compare(PADAPTER Adapter,PRT_MP_FIRMWARE pFirmware,u32 BTPatchS
 		Adapter->mppriv.bTxBufCkFail=_TRUE;
 		return _FALSE;
 	}
-	
+
 	temp=rtw_read8(Adapter,0x209);
-	
+
 	address_start=(temp*128)/8;
-	
+
 	rtw_write32(Adapter,0x140,0x00000000);
 	rtw_write32(Adapter,0x144,0x00000000);
 	rtw_write32(Adapter,0x148,0x00000000);
 
 	rtw_write8(Adapter,0x106,0x69);
-	
+
 	for(i=0;i<(BTPatchSize/8);i++)
 	{
-		rtw_write32(Adapter,0x140,address_start+5+i) ;		  
-			
+		rtw_write32(Adapter,0x140,address_start+5+i) ;
+
 		//polling until reg 0x140[23]=1;
 		do{
 			u1bTmp = rtw_read32(Adapter, 0x140);
@@ -814,21 +814,21 @@ int ReservedPage_Compare(PADAPTER Adapter,PRT_MP_FIRMWARE pFirmware,u32 BTPatchS
 			DBG_871X("0x140=%x, wait for 10 ms (%d) times.\n",u1bTmp, count);
 			rtw_msleep_os(10); // 10ms
 		}while(!(u1bTmp&BIT(23)) && count < 50);
-		
+
 			myBTFwBuffer[i*8+0]=rtw_read8(Adapter, 0x144);
 			myBTFwBuffer[i*8+1]=rtw_read8(Adapter, 0x145);
-			myBTFwBuffer[i*8+2]=rtw_read8(Adapter, 0x146); 
+			myBTFwBuffer[i*8+2]=rtw_read8(Adapter, 0x146);
 			myBTFwBuffer[i*8+3]=rtw_read8(Adapter, 0x147);
 			myBTFwBuffer[i*8+4]=rtw_read8(Adapter, 0x148);
 			myBTFwBuffer[i*8+5]=rtw_read8(Adapter, 0x149);
 			myBTFwBuffer[i*8+6]=rtw_read8(Adapter, 0x14a);
 			myBTFwBuffer[i*8+7]=rtw_read8(Adapter, 0x14b);
 	}
-	
-	rtw_write32(Adapter,0x140,address_start+5+BTPatchSize/8) ;			  
+
+	rtw_write32(Adapter,0x140,address_start+5+BTPatchSize/8) ;
 
 	lastBTsz=BTPatchSize%8;
-	
+
 	//polling until reg 0x140[23]=1;
 	u1bTmp=0;
 	count=0;
@@ -873,11 +873,11 @@ int ReservedPage_Compare(PADAPTER Adapter,PRT_MP_FIRMWARE pFirmware,u32 BTPatchS
  * the location of every part. We call the first 4096 byte of bt firmware as part 1, the second 4096
  * part as part 2, the third 4096 part as part 3, the remain as part 4. First we transform the part
  * 4 and set the register 0x209 to 0x90, then the 32 bytes description are added to the head of part
- * 4, and those bytes are putted at the location 0x90. Second we transform the part 3 and set the 
+ * 4, and those bytes are putted at the location 0x90. Second we transform the part 3 and set the
  * register 0x209 to 0x70. The 32 bytes description and part 3(4196 bytes) are putted at the location
  * 0x70. It can contain 4196 bytes between 0x70 and 0x90. So the last 32 bytes os part 3 will cover the
  * 32 bytes description of part4. Using this method, we can put the whole bt firmware to 0x30 and only
- * has 32 bytes descrption at the head of part 1.    
+ * has 32 bytes descrption at the head of part 1.
 */
 s32 FirmwareDownloadBT(PADAPTER padapter, PRT_MP_FIRMWARE pFirmware)
 {
@@ -1013,25 +1013,25 @@ u8 send_fw_packet(PADAPTER padapter, u8 *pRam_code, u32 length)
 
 	modify_ram_size = length << 2;
 	pTx_data_buffer = rtw_zmalloc(modify_ram_size);
-	
+
 	if (NULL == pTx_data_buffer) {
 		DBG_871X("Allocate buffer fail!!\n");
 		return _FALSE;
 	}
 
 	_rtw_memset(pTx_data_buffer, 0, modify_ram_size);
-	
+
 	/* Transfer to new format */
-	tmp_size = length >> 1;	
+	tmp_size = length >> 1;
 	for (i = 0;i <= tmp_size;i++){
 		*(pTx_data_buffer + i * 8) = *(pRam_code + i * 2);
-		*(pTx_data_buffer + i*8 + 1) = *(pRam_code + i * 2 + 1);			
+		*(pTx_data_buffer + i*8 + 1) = *(pRam_code + i * 2 + 1);
 	}
 
 	/* Gen TX_DESC */
 	_rtw_memset(pTx_data_buffer, 0, TXDESC_SIZE);
 	pTmp_buffer = pTx_data_buffer;
-#if 0	
+#if 0
 	pTmp_buffer->qsel = BcnQsel;
 	pTmp_buffer->txpktsize = modify_ram_size - TXDESC_SIZE;
 	pTmp_buffer->offset = TXDESC_SIZE;
@@ -1042,14 +1042,14 @@ u8 send_fw_packet(PADAPTER padapter, u8 *pRam_code, u32 length)
 #endif
 	rtl8703b_cal_txdesc_chksum((struct tx_desc*)pTmp_buffer);
 
-	
+
 	/* Send packet */
 #if 0
 	dwDataLength = modify_ram_size;
 	overlap.Offset = 0;
 	overlap.OffsetHigh = 0;
 	overlap.hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
-	bRet = WriteFile(HalVari.hFile_Queue[TX_BCNQ]->handle,pTx_data_buffer,dwDataLength,&writeLength,&overlap);	
+	bRet = WriteFile(HalVari.hFile_Queue[TX_BCNQ]->handle,pTx_data_buffer,dwDataLength,&writeLength,&overlap);
 	if(WaitForSingleObject(overlap.hEvent,INFINITE)==WAIT_OBJECT_0){
 
 		GetOverlappedResult(HalVari.hFile_Queue[TX_BCNQ]->handle,&overlap,&writeLength,FALSE);
@@ -1075,23 +1075,23 @@ u8 send_fw_packet(PADAPTER padapter, u8 *pRam_code, u32 length)
 	/* check if DMA is OK */
 	counter = 100;
 	do {
-		if (0 == counter) {			
+		if (0 == counter) {
 			DBG_871X("DMA time out!!\n");
 			return _FALSE;
-		}		
-		value8 = rtw_read8(padapter, REG_DWBCN0_CTRL_8703B + 2);	
+		}
+		value8 = rtw_read8(padapter, REG_DWBCN0_CTRL_8703B + 2);
 		counter--;
 	} while (0 == (value8 & BIT(0)));
-	 
+
 	rtw_write8(padapter, REG_DWBCN0_CTRL_8703B + 2, value8);
 
-	/* Modify ram code by IO method */	
+	/* Modify ram code by IO method */
 	tmp_value = rtw_read8(padapter, REG_MCUFWDL + 1);
 	/* Disable DMA */
 	rtw_write8(padapter, REG_MCUFWDL + 1, (u8)tmp_value & ~(BIT(5)));
 	tmp_value = (tmp_value >> 6) << 1;
 	/* Set page start address */
-	rtw_write8(padapter, REG_MCUFWDL + 2, (rtw_read8(padapter, REG_MCUFWDL + 2) & 0xF8) | tmp_value);		
+	rtw_write8(padapter, REG_MCUFWDL + 2, (rtw_read8(padapter, REG_MCUFWDL + 2) & 0xF8) | tmp_value);
 	tmp_size = TXDESC_SIZE >> 2; /* 10bytes */
 #if 0
 	IO_Func.WriteRegister(0x1000, (u2Byte)tmp_size, pRam_code);
@@ -1125,7 +1125,7 @@ s32 rtl8703b_FirmwareDownload(PADAPTER padapter, BOOLEAN  bUsedWoWLANFw)
 #ifdef CONFIG_WOWLAN
 	u8			*FwImageWoWLAN;
 	u32			FwImageWoWLANLen;
-#endif	
+#endif
 	u8			*pucMappedFile = NULL;
 	PRT_FIRMWARE_8703B	pFirmware = NULL;
 	PRT_8703B_FIRMWARE_HDR		pFwHdr = NULL;
@@ -1178,7 +1178,7 @@ s32 rtl8703b_FirmwareDownload(PADAPTER padapter, BOOLEAN  bUsedWoWLANFw)
 #ifdef CONFIG_BT_COEXIST
 	rtw_btcoex_PreLoadFirmware(padapter);
 #endif /* CONFIG_BT_COEXIST */
-	
+
 #ifdef CONFIG_FILE_FWIMG
 #ifdef CONFIG_WOWLAN
 	if (bUsedWoWLANFw)
@@ -1315,7 +1315,7 @@ s32 rtl8703b_FirmwareDownload(PADAPTER padapter, BOOLEAN  bUsedWoWLANFw)
 		rtw_write32(padapter, REG_RQPN, value32);
 
 		/* Set beacon boundary to TXFIFO header */
-		rtw_write8(padapter, REG_BCNQ_BDNY, 0);	
+		rtw_write8(padapter, REG_BCNQ_BDNY, 0);
 		rtw_write16(padapter, REG_DWBCN0_CTRL_8703B + 1, BIT(8));
 
 		/* SDIO need read this register before send packet */
@@ -1330,14 +1330,14 @@ s32 rtl8703b_FirmwareDownload(PADAPTER padapter, BOOLEAN  bUsedWoWLANFw)
 		dma_iram_sel = 0;
 		mem_offset = 0;
 		pkt_size_tmp = FirmwareLen;
-		while (0 != pkt_size_tmp) {		
+		while (0 != pkt_size_tmp) {
 			if (pkt_size_tmp >= FW_DOWNLOAD_SIZE_8703B) {
 				send_pkt_size = FW_DOWNLOAD_SIZE_8703B;
 				/* Modify check sum value */
 				new_chk_sum = (u16)(new_chk_sum ^ (((send_pkt_size - 1) << 2) - TXDESC_SIZE));
 			}
 			else{
-				send_pkt_size = pkt_size_tmp;		
+				send_pkt_size = pkt_size_tmp;
 				new_chk_sum = (u16)(new_chk_sum ^ ((send_pkt_size << 2) - TXDESC_SIZE));
 
 			}
@@ -1353,12 +1353,12 @@ s32 rtl8703b_FirmwareDownload(PADAPTER padapter, BOOLEAN  bUsedWoWLANFw)
 			/* Enable DMA */
 			rtw_write8(padapter, REG_MCUFWDL + 1, rtw_read8(padapter, REG_MCUFWDL + 1) | BIT(5));
 
-			if (_FALSE == send_fw_packet(padapter, pFirmwareBuf + mem_offset, send_pkt_size)) {	
+			if (_FALSE == send_fw_packet(padapter, pFirmwareBuf + mem_offset, send_pkt_size)) {
 				DBG_871X("%s: Send FW fail !\n", __FUNCTION__);
 				rtStatus = _FAIL;
 				goto DLFW_FAIL;
 			}
-			
+
 			dma_iram_sel++;
 			mem_offset += send_pkt_size;
 			pkt_size_tmp -= send_pkt_size;
@@ -1385,7 +1385,7 @@ DLFW_FAIL:
 		value8 = (value8 & ~(BIT(0)) & ~(BIT(1)));
 		rtw_write8(padapter, REG_MCUFWDL, value8);
 	}
-	
+
 	DBG_871X("%s %s. write_fw:%u, %dms\n"
 		, __FUNCTION__, (rtStatus == _SUCCESS)?"success":"fail"
 		, write_fw
@@ -1397,7 +1397,7 @@ exit:
 		rtw_mfree((u8*)pFirmware, sizeof(RT_FIRMWARE_8703B));
 
 	rtl8703b_InitializeFirmwareVars(padapter);
-	
+
 	DBG_871X(" <=== %s()\n", __FUNCTION__);
 
 	return rtStatus;
@@ -1412,7 +1412,7 @@ void rtl8703b_InitializeFirmwareVars(PADAPTER padapter)
 
 	//Init H2C cmd.
 	rtw_write8(padapter, REG_HMETFR, 0x0f);
-	
+
 	// Init H2C counter. by tynli. 2009.12.09.
 	pHalData->LastHMEBoxNum = 0;
 //	pHalData->H2CQueueHead = 0;
@@ -1605,7 +1605,7 @@ static void Hal_BT_EfusePowerSwitch(
 		tempval = rtw_read8(padapter, 0x6B);
 		tempval |= BIT(6);
 		rtw_write8(padapter, 0x6B, tempval);
-		
+
 		// Attention!! Between 0x6A[14] and 0x6A[15] setting need 100us delay
 		// So don't wirte 0x6A[14]=1 and 0x6A[15]=0 together!
 		rtw_usleep_os(100);
@@ -1647,8 +1647,8 @@ Hal_EfusePowerSwitch(
 	if (PwrState == _TRUE)
 	{
 #ifdef CONFIG_SDIO_HCI
-		// To avoid cannot access efuse regsiters after disable/enable several times during DTM test. 
-		// Suggested by SD1 IsaacHsu. 2013.07.08, added by tynli. 
+		// To avoid cannot access efuse regsiters after disable/enable several times during DTM test.
+		// Suggested by SD1 IsaacHsu. 2013.07.08, added by tynli.
 		tempval = rtw_read8(padapter, SDIO_LOCAL_BASE|SDIO_REG_HSUS_CTRL);
 		if (tempval & BIT(0)) // SDIO local register is suspend
 		{
@@ -1685,7 +1685,7 @@ Hal_EfusePowerSwitch(
 		}
 #endif // CONFIG_SDIO_HCI
 
-		rtw_write8(padapter, REG_EFUSE_ACCESS_8703, EFUSE_ACCESS_ON_8703);	
+		rtw_write8(padapter, REG_EFUSE_ACCESS_8703, EFUSE_ACCESS_ON_8703);
 
 		// Reset: 0x0000h[28], default valid
 		tmpV16 =  rtw_read16(padapter, REG_SYS_FUNC_EN);
@@ -2184,7 +2184,7 @@ hal_EfuseGetCurrentSize_WiFi(
 	{
 		rtw_hal_set_hwreg(padapter, HW_VAR_EFUSE_BYTES, (u8*)&efuse_addr);
 	}
-	
+
 	goto exit;
 
 error:
@@ -2267,7 +2267,7 @@ hal_EfuseGetCurrentSize_BT(
 				efuse_addr++;
 				efuse_OneByteRead(padapter, efuse_addr, &efuse_data, bPseudoTest);
 				DBG_8192C("%s: efuse_OneByteRead EXT_HEADER ! addr=0x%X !efuse_data=0x%X! bank =%d\n", __FUNCTION__, efuse_addr,efuse_data,bank);
-			
+
 				if (ALL_WORDS_DISABLED(efuse_data))
 				{
 					efuse_addr++;
@@ -2291,11 +2291,11 @@ hal_EfuseGetCurrentSize_BT(
 			//read next header
 			efuse_addr += (word_cnts*2)+1;
 		}
-#else	
-	while (	bContinual && 
-			efuse_OneByteRead(padapter, efuse_addr ,&efuse_data, bPseudoTest) && 
+#else
+	while (	bContinual &&
+			efuse_OneByteRead(padapter, efuse_addr ,&efuse_data, bPseudoTest) &&
 			AVAILABLE_EFUSE_ADDR(efuse_addr))
-		{	
+		{
 			if(efuse_data!=0xFF)
 			{
 				if((efuse_data&0x1F) == 0x0F)		//extended header
@@ -2313,23 +2313,23 @@ hal_EfuseGetCurrentSize_BT(
 						hoffset = ((hoffset & 0xE0) >> 5) | ((efuse_data & 0xF0) >> 1);
 						hworden = efuse_data & 0x0F;
 					}
-				}		
+				}
 				else
 				{
 					hoffset = (efuse_data>>4) & 0x0F;
-					hworden =  efuse_data & 0x0F;									
+					hworden =  efuse_data & 0x0F;
 				}
 				word_cnts = Efuse_CalculateWordCnts(hworden);
-				//read next header							
-				efuse_addr = efuse_addr + (word_cnts*2)+1;						
+				//read next header
+				efuse_addr = efuse_addr + (word_cnts*2)+1;
 			}
 			else
 			{
-				bContinual = _FALSE ;			
+				bContinual = _FALSE ;
 			}
 		}
-#endif			
-	
+#endif
+
 
 		// Check if we need to check next bank efuse
 		if (efuse_addr < retU2)
@@ -3088,9 +3088,9 @@ void rtl8703b_InitBeaconParameters(PADAPTER padapter)
 	// Suggested by designer timchen. Change beacon AIFS to the largest number
 	// beacause test chip does not contension before sending beacon. by tynli. 2009.11.03
 	rtw_write16(padapter, REG_BCNTCFG, 0x660F);
-	
+
 	pHalData->RegBcnCtrlVal = rtw_read8(padapter, REG_BCN_CTRL);
-	pHalData->RegTxPause = rtw_read8(padapter, REG_TXPAUSE); 
+	pHalData->RegTxPause = rtw_read8(padapter, REG_TXPAUSE);
 	pHalData->RegFwHwTxQCtrl = rtw_read8(padapter, REG_FWHW_TXQ_CTRL+2);
 	pHalData->RegReg542 = rtw_read8(padapter, REG_TBTT_PROHIBIT+2);
 	pHalData->RegCR_1 = rtw_read8(padapter, REG_CR+1);
@@ -3279,7 +3279,7 @@ u8 rtl8703b_MRateIdxToARFRId(PADAPTER padapter, u8 rate_idx)
 	case RATR_INX_WIRELESS_NGB:
 		if(rftype == RF_1T1R)
 			ret = 1;
-		else 
+		else
 			ret = 0;
 		break;
 
@@ -3294,7 +3294,7 @@ u8 rtl8703b_MRateIdxToARFRId(PADAPTER padapter, u8 rate_idx)
 	case RATR_INX_WIRELESS_NB:
 		if(rftype == RF_1T1R)
 			ret = 3;
-		else 
+		else
 			ret = 2;
 		break;
 
@@ -3304,7 +3304,7 @@ u8 rtl8703b_MRateIdxToARFRId(PADAPTER padapter, u8 rate_idx)
 
 	case RATR_INX_WIRELESS_G:
 		ret = 7;
-		break;	
+		break;
 
 	case RATR_INX_WIRELESS_B:
 		ret = 8;
@@ -3326,7 +3326,7 @@ u8 rtl8703b_MRateIdxToARFRId(PADAPTER padapter, u8 rate_idx)
 	default:
 		ret = 0;
 		break;
-	}	
+	}
 
 	return ret;
 }
@@ -3357,7 +3357,7 @@ void UpdateHalRAMask8703B(PADAPTER padapter, u32 mac_id, u8 rssi_level)
 
 	mask = psta->ra_mask;
 
-	rate_bitmap = 0xffffffff;					
+	rate_bitmap = 0xffffffff;
 	rate_bitmap = ODM_Get_Rate_Bitmap(&pHalData->odmpriv,mac_id,mask,rssi_level);
 	DBG_871X("%s => mac_id:%d, networkType:0x%02x, mask:0x%08x\n\t ==> rssi_level:%d, rate_bitmap:0x%08x\n",
 			__FUNCTION__,mac_id,psta->wireless_mode,mask,rssi_level,rate_bitmap);
@@ -3450,22 +3450,22 @@ void rtl8703b_fill_fake_txdesc(
 		switch (EncAlg)
 		{
 			case _NO_PRIVACY_:
-				SET_TX_DESC_SEC_TYPE_8703B(pDesc, 0x0); 
+				SET_TX_DESC_SEC_TYPE_8703B(pDesc, 0x0);
 				break;
 			case _WEP40_:
 			case _WEP104_:
 			case _TKIP_:
-				SET_TX_DESC_SEC_TYPE_8703B(pDesc, 0x1); 
+				SET_TX_DESC_SEC_TYPE_8703B(pDesc, 0x1);
 				break;
 			case _SMS4_:
-				SET_TX_DESC_SEC_TYPE_8703B(pDesc, 0x2); 
+				SET_TX_DESC_SEC_TYPE_8703B(pDesc, 0x2);
 				break;
 			case _AES_:
 				SET_TX_DESC_SEC_TYPE_8703B(pDesc, 0x3);
 				break;
 			default:
-				SET_TX_DESC_SEC_TYPE_8703B(pDesc, 0x0); 
-				break;	 
+				SET_TX_DESC_SEC_TYPE_8703B(pDesc, 0x0);
+				break;
 		}
 	}
 
@@ -3499,7 +3499,7 @@ void rtl8703b_set_hal_ops(struct hal_ops *pHalFunc)
 #ifdef CONFIG_C2H_PACKET_EN
 	pHalFunc->SetHwRegHandlerWithBuf = &SetHwRegWithBuf8703B;
 #endif // CONFIG_C2H_PACKET_EN
-	
+
 	pHalFunc->SetBeaconRelatedRegistersHandler = &rtl8703b_SetBeaconRelatedRegisters;
 
 	pHalFunc->Add_RateATid = &rtl8703b_Add_RateATid;
@@ -3564,16 +3564,16 @@ void rtl8703b_InitAntenna_Selection(PADAPTER padapter)
 	rtw_write8(padapter, REG_LEDCFG2, val);
 #else
 		// TODO: <20130114, Kordan> The following setting is only for DPDT and Fixed board type.
-	// TODO:  A better solution is configure it according EFUSE during the run-time. 
-	PHY_SetMacReg(padapter, 0x64, BIT20, 0x0);		   //0x66[4]=0		
+	// TODO:  A better solution is configure it according EFUSE during the run-time.
+	PHY_SetMacReg(padapter, 0x64, BIT20, 0x0);		   //0x66[4]=0
 	PHY_SetMacReg(padapter, 0x64, BIT24, 0x0);		   //0x66[8]=0
-	PHY_SetMacReg(padapter, 0x40, BIT4, 0x0);		   //0x40[4]=0		
-	PHY_SetMacReg(padapter, 0x40, BIT3, 0x1);		   //0x40[3]=1		
+	PHY_SetMacReg(padapter, 0x40, BIT4, 0x0);		   //0x40[4]=0
+	PHY_SetMacReg(padapter, 0x40, BIT3, 0x1);		   //0x40[3]=1
 	PHY_SetMacReg(padapter, 0x4C, BIT24, 0x1);   	   //0x4C[24:23]=10
-	PHY_SetMacReg(padapter, 0x4C, BIT23, 0x0);   	   //0x4C[24:23]=10	
-	PHY_SetBBReg(padapter, 0x944, BIT1|BIT0, 0x3);     //0x944[1:0]=11	
-	PHY_SetBBReg(padapter, 0x930, bMaskByte0, 0x77);   //0x930[7:0]=77	  
-	PHY_SetMacReg(padapter, 0x38, BIT11, 0x1); 	       //0x38[11]=1 
+	PHY_SetMacReg(padapter, 0x4C, BIT23, 0x0);   	   //0x4C[24:23]=10
+	PHY_SetBBReg(padapter, 0x944, BIT1|BIT0, 0x3);     //0x944[1:0]=11
+	PHY_SetBBReg(padapter, 0x930, bMaskByte0, 0x77);   //0x930[7:0]=77
+	PHY_SetMacReg(padapter, 0x38, BIT11, 0x1); 	       //0x38[11]=1
 #endif
 #endif
 }
@@ -3749,18 +3749,18 @@ n. LEDCFG 0x4C[15:0] = 0x8080
 	value32 |= ((u4bTmp<<8) | 0x00FF0000);
 	rtw_write32(padapter, REG_GPIO_PIN_CTRL, value32);
 
-	
+
 		//2. Disable GPIO[10:8]
 		rtw_write8(padapter, REG_MAC_PINMUX_CFG, 0x00);
 		value16 = rtw_read16(padapter, REG_GPIO_IO_SEL) & 0xFF0F;
 		value8 = (u8) (value16&0x000F);
 		value16 |= ((value8<<4) | 0x0780);
 		rtw_write16(padapter, REG_GPIO_IO_SEL, value16);
-	
+
 
 	//3. Disable LED0 & 1
 		rtw_write16(padapter, REG_LEDCFG0, 0x8080);
-	
+
 //	RT_TRACE(COMP_INIT, DBG_LOUD, ("======> Disable GPIO and LED.\n"));
 } //end of _DisableGPIO()
 
@@ -4055,7 +4055,7 @@ s32 CardDisableWithoutHWSM(PADAPTER padapter)
 }
 #endif // CONFIG_USB_HCI || CONFIG_SDIO_HCI || CONFIG_GSPI_HCI
 
-BOOLEAN 
+BOOLEAN
 Hal_GetChnlGroup8703B(
 	IN	u8 Channel,
 	OUT u8 *pGroup
@@ -4101,7 +4101,7 @@ Hal_GetChnlGroup8703B(
 		}
 
 	}
-	RT_TRACE(_module_hci_hal_init_c_, _drv_info_, ("<==Hal_GetChnlGroup8703B,  (%s) Channel = %d, Group =%d,\n", 
+	RT_TRACE(_module_hci_hal_init_c_, _drv_info_, ("<==Hal_GetChnlGroup8703B,  (%s) Channel = %d, Group =%d,\n",
                                   (bIn24G) ? "2.4G" : "5G", Channel, *pGroup));
 	return bIn24G;
 }
@@ -4226,7 +4226,7 @@ Hal_GetChnlGroup(
 	return group;
 }
 
-void 
+void
 Hal_ReadPowerValueFromPROM_8703B(
 	IN	PADAPTER 		Adapter,
 	IN	PTxPowerInfo24G	pwrInfo24G,
@@ -4237,13 +4237,13 @@ Hal_ReadPowerValueFromPROM_8703B(
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u4Byte rfPath, eeAddr=EEPROM_TX_PWR_INX_8703B, group,TxCount=0;
 
-	_rtw_memset(pwrInfo24G, 0, sizeof(TxPowerInfo24G));	
+	_rtw_memset(pwrInfo24G, 0, sizeof(TxPowerInfo24G));
 
-	if(0xFF == PROMContent[eeAddr+1])  
+	if(0xFF == PROMContent[eeAddr+1])
 		AutoLoadFail = TRUE;
-	
+
 	if(AutoLoadFail)
-	{	
+	{
 		DBG_871X("%s(): Use Default value!\n", __func__);
 		for(rfPath = 0 ; rfPath < MAX_RF_PATH ; rfPath++)
 		{
@@ -4269,12 +4269,12 @@ Hal_ReadPowerValueFromPROM_8703B(
 				}
 			}
 		}
-		
+
 		return;
-	}	
+	}
 
 	pHalData->bTXPowerDataReadFromEEPORM = TRUE;		//YJ,move,120316
-	
+
 	for(rfPath = 0 ; rfPath < MAX_RF_PATH ; rfPath++)
 	{
 		//2 2.4G default value
@@ -4291,7 +4291,7 @@ Hal_ReadPowerValueFromPROM_8703B(
 			pwrInfo24G->IndexBW40_Base[rfPath][group] =	PROMContent[eeAddr++];
 			if(pwrInfo24G->IndexBW40_Base[rfPath][group] == 0xFF)
 				pwrInfo24G->IndexBW40_Base[rfPath][group] =	EEPROM_DEFAULT_24G_INDEX;
-		}			
+		}
 		for(TxCount=0;TxCount<MAX_TX_COUNT;TxCount++)
 		{
 			if(TxCount==0)
@@ -4355,8 +4355,8 @@ Hal_EfuseParseTxPowerInfo_8703B(
 	{
 		for (ch = 0 ; ch < CENTER_CH_2G_NUM; ch++) {
 			Hal_GetChnlGroup8703B(ch+1, &group);
-			
-			if(ch == 14-1) 
+
+			if(ch == 14-1)
 			{
 				pHalData->Index24G_CCK_Base[rfPath][ch] = pwrInfo24G.IndexCCK_Base[rfPath][5];
 				pHalData->Index24G_BW40_Base[rfPath][ch] = pwrInfo24G.IndexBW40_Base[rfPath][group];
@@ -4367,26 +4367,26 @@ Hal_EfuseParseTxPowerInfo_8703B(
 				pHalData->Index24G_BW40_Base[rfPath][ch] = pwrInfo24G.IndexBW40_Base[rfPath][group];
 			}
 #ifdef CONFIG_DEBUG
-			RT_TRACE(_module_hci_hal_init_c_, _drv_info_, ("======= Path %d, ChannelIndex %d, Group %d=======\n",rfPath,ch, group));			
+			RT_TRACE(_module_hci_hal_init_c_, _drv_info_, ("======= Path %d, ChannelIndex %d, Group %d=======\n",rfPath,ch, group));
 			RT_TRACE(_module_hci_hal_init_c_, _drv_info_, ("Index24G_CCK_Base[%d][%d] = 0x%x\n",rfPath,ch ,pHalData->Index24G_CCK_Base[rfPath][ch]));
-			RT_TRACE(_module_hci_hal_init_c_, _drv_info_, ("Index24G_BW40_Base[%d][%d] = 0x%x\n",rfPath,ch,pHalData->Index24G_BW40_Base[rfPath][ch]));			
-#endif							
+			RT_TRACE(_module_hci_hal_init_c_, _drv_info_, ("Index24G_BW40_Base[%d][%d] = 0x%x\n",rfPath,ch,pHalData->Index24G_BW40_Base[rfPath][ch]));
+#endif
 		}
-		
+
 		for(TxCount=0;TxCount<MAX_TX_COUNT;TxCount++)
 		{
 			pHalData->CCK_24G_Diff[rfPath][TxCount]=pwrInfo24G.CCK_Diff[rfPath][TxCount];
 			pHalData->OFDM_24G_Diff[rfPath][TxCount]=pwrInfo24G.OFDM_Diff[rfPath][TxCount];
 			pHalData->BW20_24G_Diff[rfPath][TxCount]=pwrInfo24G.BW20_Diff[rfPath][TxCount];
 			pHalData->BW40_24G_Diff[rfPath][TxCount]=pwrInfo24G.BW40_Diff[rfPath][TxCount];
-			
+
 #ifdef CONFIG_DEBUG
 			RT_TRACE(_module_hci_hal_init_c_, _drv_info_, ("--------------------------------------- 2.4G ---------------------------------------\n"));
 			RT_TRACE(_module_hci_hal_init_c_, _drv_info_, ("CCK_24G_Diff[%d][%d]= %d\n",rfPath,TxCount,pHalData->CCK_24G_Diff[rfPath][TxCount]));
 			RT_TRACE(_module_hci_hal_init_c_, _drv_info_, ("OFDM_24G_Diff[%d][%d]= %d\n",rfPath,TxCount,pHalData->OFDM_24G_Diff[rfPath][TxCount]));
 			RT_TRACE(_module_hci_hal_init_c_, _drv_info_, ("BW20_24G_Diff[%d][%d]= %d\n",rfPath,TxCount,pHalData->BW20_24G_Diff[rfPath][TxCount]));
 			RT_TRACE(_module_hci_hal_init_c_, _drv_info_, ("BW40_24G_Diff[%d][%d]= %d\n",rfPath,TxCount,pHalData->BW40_24G_Diff[rfPath][TxCount]));
-#endif							
+#endif
 		}
 	}
 
@@ -4406,7 +4406,7 @@ Hal_EfuseParseTxPowerInfo_8703B(
 
 VOID
 Hal_EfuseParseBoardType_8703B(
-	IN	PADAPTER	Adapter,	
+	IN	PADAPTER	Adapter,
 	IN	u8*			PROMContent,
 	IN	BOOLEAN		AutoloadFail
 	)
@@ -4469,7 +4469,7 @@ Hal_EfuseParseBTCoexistInfo_8703B(
 			pHalData->ant_path = ODM_RF_PATH_B;//s0
 			#else
 			pHalData->ant_path = ODM_RF_PATH_A;
-			#endif			
+			#endif
 		}
 	}
 	else
@@ -4510,7 +4510,7 @@ Hal_EfuseParseBTCoexistInfo_8703B(
 
 	rtw_btcoex_SetBTCoexist(padapter, pHalData->EEPROMBluetoothCoexist);
 	rtw_btcoex_SetChipType(padapter, pHalData->EEPROMBluetoothType);
-	rtw_btcoex_SetPGAntNum(padapter, pHalData->EEPROMBluetoothAntNum==Ant_x2?2:1); 
+	rtw_btcoex_SetPGAntNum(padapter, pHalData->EEPROMBluetoothAntNum==Ant_x2?2:1);
 	if (pHalData->EEPROMBluetoothAntNum == Ant_x1)
 	{
 		rtw_btcoex_SetSingleAntPath(padapter, pHalData->ant_path);
@@ -4546,7 +4546,7 @@ Hal_EfuseParseVoltage_8703B(
 	IN	PADAPTER		pAdapter,
 	IN	u8* 			hwinfo,
 	IN	BOOLEAN 	AutoLoadFail
-	) 
+	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 
@@ -4733,7 +4733,7 @@ void Hal_ReadRFGainOffset(
 }
 
 
-u8 
+u8
 BWMapping_8703B(
 	IN	PADAPTER		Adapter,
 	IN	struct pkt_attrib	*pattrib
@@ -4775,7 +4775,7 @@ u8	SCMapping_8703B(PADAPTER Adapter, struct pkt_attrib *pattrib)
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 
 	//DBG_871X("SCMapping: pHalData->CurrentChannelBW %d, pHalData->nCur80MhzPrimeSC %d, pHalData->nCur40MhzPrimeSC %d \n",pHalData->CurrentChannelBW,pHalData->nCur80MhzPrimeSC,pHalData->nCur40MhzPrimeSC);
-	
+
 	if(pHalData->CurrentChannelBW == CHANNEL_WIDTH_80)
 	{
 		if(pattrib->bwmode == CHANNEL_WIDTH_80)
@@ -5213,7 +5213,7 @@ static void hw_var_set_monitor(PADAPTER Adapter, u8 variable, u8 *val)
 		rcr_bits |= RCR_APPFCS;
 
 		#if 0
-		/* 
+		/*
 		   CRC and ICV packet will drop in recvbuf2recvframe()
 		   We no turn on it.
 		 */
@@ -5268,9 +5268,9 @@ static void hw_var_set_opmode(PADAPTER padapter, u8 variable, u8* val)
 		val8 = rtw_read8(padapter, REG_BCN_CTRL_1);
 		val8 |= DIS_TSF_UDT;
 		rtw_write8(padapter, REG_BCN_CTRL_1, val8);
-		
+
 		Set_MSR(padapter, mode);
-		
+
 		DBG_871X("#### %s()-%d iface_type(%d) mode=%d ####\n",
 			__FUNCTION__, __LINE__, padapter->iface_type, mode);
 
@@ -5282,9 +5282,9 @@ static void hw_var_set_opmode(PADAPTER padapter, u8 variable, u8* val)
 #ifdef CONFIG_PCI_HCI
 				UpdateInterruptMask8703BE(padapter, 0, 0, RT_BCN_INT_MASKS, 0);
 #else // !CONFIG_PCI_HCI
-#ifdef CONFIG_INTERRUPT_BASED_TXBCN	
+#ifdef CONFIG_INTERRUPT_BASED_TXBCN
 
-#ifdef CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT	
+#ifdef CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT
 				rtw_write8(padapter, REG_DRVERLYINT, 0x05);//restore early int time to 5ms
 				UpdateInterruptMask8703BU(padapter, _TRUE, 0, IMR_BCNDMAINT0_8703B);
 #endif // CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT
@@ -5316,7 +5316,7 @@ static void hw_var_set_opmode(PADAPTER padapter, u8 variable, u8* val)
 			UpdateInterruptMask8703BU(padapter, _TRUE, IMR_BCNDMAINT0_8703B, 0);
 #endif // CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT
 
-#ifdef CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR	
+#ifdef CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR
 			UpdateInterruptMask8703BU(padapter, _TRUE, (IMR_TXBCN0ERR_8703B|IMR_TXBCN0OK_8703B), 0);
 #endif // CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR
 
@@ -5331,21 +5331,21 @@ static void hw_var_set_opmode(PADAPTER padapter, u8 variable, u8* val)
 			//rtw_write32(padapter, REG_RCR, 0x70002a8e);//CBSSID_DATA must set to 0
 			//rtw_write32(padapter, REG_RCR, 0x7000228e);//CBSSID_DATA must set to 0
 			rtw_write32(padapter, REG_RCR, 0x7000208e);//CBSSID_DATA must set to 0,reject ICV_ERR packet
-			// enable to rx data frame				
+			// enable to rx data frame
 			rtw_write16(padapter, REG_RXFLTMAP2, 0xFFFF);
 			// enable to rx ps-poll
 			rtw_write16(padapter, REG_RXFLTMAP1, 0x0400);
 
-			// Beacon Control related register for first time 
-			rtw_write8(padapter, REG_BCNDMATIM, 0x02); // 2ms		
+			// Beacon Control related register for first time
+			rtw_write8(padapter, REG_BCNDMATIM, 0x02); // 2ms
 
 			//rtw_write8(padapter, REG_BCN_MAX_ERR, 0xFF);
 			rtw_write8(padapter, REG_ATIMWND_1, 0x0a); // 10ms for port1
 			rtw_write16(padapter, REG_BCNTCFG, 0x00);
 			rtw_write16(padapter, REG_TBTT_PROHIBIT, 0xff04);
 			rtw_write16(padapter, REG_TSFTR_SYN_OFFSET, 0x7fff);// +32767 (~32ms)
-	
-			// reset TSF2	
+
+			// reset TSF2
 			rtw_write8(padapter, REG_DUAL_TSF_RST, BIT(1));
 
 			// enable BCN1 Function for if2
@@ -5355,11 +5355,11 @@ static void hw_var_set_opmode(PADAPTER padapter, u8 variable, u8* val)
 			//SW_BCN_SEL - Port1
 			//rtw_write8(Adapter, REG_DWBCN1_CTRL_8192E+2, rtw_read8(Adapter, REG_DWBCN1_CTRL_8192E+2)|BIT4);
 			rtw_hal_set_hwreg(padapter, HW_VAR_DL_BCN_SEL, NULL);
-			
+
 			// select BCN on port 1
 			rtw_write8(padapter, REG_CCK_CHECK_8703B,
 				(rtw_read8(padapter, REG_CCK_CHECK_8703B)|BIT_BCN_PORT_SEL));
-			
+
 			if (check_buddy_fwstate(padapter, WIFI_FW_NULL_STATE))
 			{
 				val8 = rtw_read8(padapter, REG_BCN_CTRL);
@@ -5370,7 +5370,7 @@ static void hw_var_set_opmode(PADAPTER padapter, u8 variable, u8* val)
 			//BCN1 TSF will sync to BCN0 TSF with offset(0x518) if if1_sta linked
 			//rtw_write8(padapter, REG_BCN_CTRL_1, rtw_read8(padapter, REG_BCN_CTRL_1)|BIT(5));
 			//rtw_write8(padapter, REG_DUAL_TSF_RST, BIT(3));
-					
+
 			//dis BCN0 ATIM  WND if if1 is station
 			rtw_write8(padapter, REG_BCN_CTRL, rtw_read8(padapter, REG_BCN_CTRL)|DIS_ATIM);
 
@@ -5400,7 +5400,7 @@ static void hw_var_set_opmode(PADAPTER padapter, u8 variable, u8* val)
 		if ((mode == _HW_STATE_STATION_) || (mode == _HW_STATE_NOLINK_))
 		{
 #ifdef CONFIG_CONCURRENT_MODE
-			if (!check_buddy_mlmeinfo_state(padapter, WIFI_FW_AP_STATE))		
+			if (!check_buddy_mlmeinfo_state(padapter, WIFI_FW_AP_STATE))
 #endif // CONFIG_CONCURRENT_MODE
 			{
 				StopTxBeacon(padapter);
@@ -5461,8 +5461,8 @@ static void hw_var_set_opmode(PADAPTER padapter, u8 variable, u8* val)
 			rtw_write16(padapter, REG_RXFLTMAP1, 0x0400);
 
 			//Beacon Control related register for first time
-			rtw_write8(padapter, REG_BCNDMATIM, 0x02); // 2ms			
-			
+			rtw_write8(padapter, REG_BCNDMATIM, 0x02); // 2ms
+
 			//rtw_write8(padapter, REG_BCN_MAX_ERR, 0xFF);
 			rtw_write8(padapter, REG_ATIMWND, 0x0a); // 10ms
 			rtw_write16(padapter, REG_BCNTCFG, 0x00);
@@ -5471,18 +5471,18 @@ static void hw_var_set_opmode(PADAPTER padapter, u8 variable, u8* val)
 
 			//reset TSF
 			rtw_write8(padapter, REG_DUAL_TSF_RST, BIT(0));
-	
+
 			//enable BCN0 Function for if1
 			//don't enable update TSF0 for if1 (due to TSF update when beacon/probe rsp are received)
 			rtw_write8(padapter, REG_BCN_CTRL, (DIS_TSF_UDT|EN_BCN_FUNCTION|EN_TXBCN_RPT|DIS_BCNQ_SUB));
-		
+
 			//SW_BCN_SEL - Port0
 			//rtw_write8(Adapter, REG_DWBCN1_CTRL_8192E+2, rtw_read8(Adapter, REG_DWBCN1_CTRL_8192E+2) & ~BIT4);
 			rtw_hal_set_hwreg(padapter, HW_VAR_DL_BCN_SEL, NULL);
-			
+
 			// select BCN on port 0
 			rtw_write8(padapter, REG_CCK_CHECK_8703B,
-				(rtw_read8(padapter, REG_CCK_CHECK_8703B)& ~BIT_BCN_PORT_SEL));				
+				(rtw_read8(padapter, REG_CCK_CHECK_8703B)& ~BIT_BCN_PORT_SEL));
 
 #ifdef CONFIG_CONCURRENT_MODE
 			if (check_buddy_fwstate(padapter, WIFI_FW_NULL_STATE))
@@ -5597,7 +5597,7 @@ static void hw_var_set_correct_tsf(PADAPTER padapter, u8 variable, u8* val)
 
 	pmlmeext = &padapter->mlmeextpriv;
 	pmlmeinfo = &pmlmeext->mlmext_info;
-	
+
 	tsf = pmlmeext->TSFValue - rtw_modular64(pmlmeext->TSFValue, (pmlmeinfo->bcn_interval*1024)) -1024; //us
 
 	if (((pmlmeinfo->state&0x03) == WIFI_FW_ADHOC_STATE) ||
@@ -5726,7 +5726,7 @@ static void hw_var_set_mlme_disconnect(PADAPTER padapter, u8 variable, u8 *val)
 		val8 = rtw_read8(padapter, REG_BCN_CTRL_1);
 		val8 |= DIS_TSF_UDT;
 		rtw_write8(padapter, REG_BCN_CTRL_1, val8);
-		
+
 		// disable Port1's beacon function
 		val8 = rtw_read8(padapter, REG_BCN_CTRL_1);
 		val8 &= ~EN_BCN_FUNCTION;
@@ -5867,7 +5867,7 @@ static void hw_var_set_mlme_sitesurvey(PADAPTER padapter, u8 variable, u8* val)
 					tx_beacon_hdl(iface, NULL);
 					#endif
 					#endif
-					
+
 				}
 			}
 		}
@@ -6023,11 +6023,11 @@ static void hw_var_set_mlme_join(PADAPTER padapter, u8 variable, u8 *val)
 void CCX_FwC2HTxRpt_8703b(PADAPTER padapter, u8 *pdata, u8 len)
 {
 	u8 seq_no;
-	
+
 #define	GET_8703B_C2H_TX_RPT_LIFE_TIME_OVER(_Header)	LE_BITS_TO_1BYTE((_Header + 0), 6, 1)
 #define	GET_8703B_C2H_TX_RPT_RETRY_OVER(_Header)	LE_BITS_TO_1BYTE((_Header + 0), 7, 1)
 
-	//DBG_871X("%s, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x\n", __func__, 
+	//DBG_871X("%s, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x\n", __func__,
 	//		*pdata, *(pdata+1), *(pdata+2), *(pdata+3), *(pdata+4), *(pdata+5), *(pdata+6), *(pdata+7));
 
 	seq_no = *(pdata+6);
@@ -6036,12 +6036,12 @@ void CCX_FwC2HTxRpt_8703b(PADAPTER padapter, u8 *pdata, u8 len)
 	if (GET_8703B_C2H_TX_RPT_RETRY_OVER(pdata) | GET_8703B_C2H_TX_RPT_LIFE_TIME_OVER(pdata)) {
 		rtw_ack_tx_done(&padapter->xmitpriv, RTW_SCTX_DONE_CCX_PKT_FAIL);
 	}
-/*	
+/*
 	else if(seq_no != padapter->xmitpriv.seq_no) {
 		DBG_871X("tx_seq_no=%d, rpt_seq_no=%d\n", padapter->xmitpriv.seq_no, seq_no);
 		rtw_ack_tx_done(&padapter->xmitpriv, RTW_SCTX_DONE_CCX_PKT_FAIL);
-	} 
-*/	
+	}
+*/
 	else {
 		rtw_ack_tx_done(&padapter->xmitpriv, RTW_SCTX_DONE_SUCCESS);
 	}
@@ -6054,7 +6054,7 @@ s32 c2h_id_filter_ccx_8703b(u8 *buf)
 	s32 ret = _FALSE;
 	if (c2h_evt->id == C2H_CCX_TX_RPT)
 		ret = _TRUE;
-	
+
 	return ret;
 }
 
@@ -6147,7 +6147,7 @@ static void process_c2h_event(PADAPTER padapter, PC2H_EVT_HDR pC2hEvent, u8 *c2h
 	default:
 		if (!(phydm_c2H_content_parsing(pDM_Odm, pC2hEvent->CmdID, pC2hEvent->CmdLen, c2hBuf)))
 			RT_TRACE(_module_hal_init_c_, _drv_info_, ("%s: [WARNING] unknown C2H(0x%02x)\n", __func__, c2hCmdId));
-			
+
 		break;
 	}
 
@@ -6167,7 +6167,7 @@ static void C2HPacketHandler_8703B(PADAPTER padapter, u8 *pbuffer, u16 length)
 	u8 *tmpBuf=NULL;
 #ifdef CONFIG_WOWLAN
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
-	
+
 	if(pwrpriv->wowlan_mode == _TRUE)
 	{
 		DBG_871X("%s(): return because wowolan_mode==TRUE! CMDID=%d\n", __func__, pbuffer[0]);
@@ -6182,7 +6182,7 @@ static void C2HPacketHandler_8703B(PADAPTER padapter, u8 *pbuffer, u16 length)
 	//DBG_871X("%s C2hEvent.CmdID:%x C2hEvent.CmdLen:%x C2hEvent.CmdSeq:%x\n",
 	//		__func__, C2hEvent.CmdID, C2hEvent.CmdLen, C2hEvent.CmdSeq);
 	RT_PRINT_DATA(_module_hal_init_c_, _drv_notice_, "C2HPacketHandler_8703B(): Command Content:\n", tmpBuf, C2hEvent.CmdLen);
-	
+
 	process_c2h_event(padapter, &C2hEvent, tmpBuf);
 	//c2h_handler_8703b(padapter,&C2hEvent);
 	return;
@@ -6621,7 +6621,7 @@ _func_enter_;
 		case HW_VAR_H2C_PS_TUNE_PARAM:
 			rtl8703b_set_FwPsTuneParam_cmd(padapter);
 			break;
-			
+
 		case HW_VAR_H2C_FW_JOINBSSRPT:
 			rtl8703b_set_FwJoinBssRpt_cmd(padapter, *val);
 			break;
@@ -6648,10 +6648,10 @@ _func_enter_;
 				u8	Ant;
 				/*switch antenna to Optimum_antenna*/
 				/*DBG_8192C("==> HW_VAR_ANTENNA_DIVERSITY_SELECT , Ant_(%s)\n",(Optimum_antenna==2)?"A":"B");*/
-				if (pHalData->CurAntenna !=  Optimum_antenna) {					
+				if (pHalData->CurAntenna !=  Optimum_antenna) {
 					Ant = (Optimum_antenna == 2) ? MAIN_ANT : AUX_ANT;
 					ODM_UpdateRxIdleAnt(&pHalData->odmpriv, Ant);
-						
+
 					pHalData->CurAntenna = Optimum_antenna;
 					/*DBG_8192C("==> HW_VAR_ANTENNA_DIVERSITY_SELECT , Ant_(%s)\n",(Optimum_antenna==2)?"A":"B");*/
 				}
@@ -6736,7 +6736,7 @@ _func_enter_;
 				val16 = RetryLimit << RETRY_LIMIT_SHORT_SHIFT | RetryLimit << RETRY_LIMIT_LONG_SHIFT;
 				rtw_write16(padapter, REG_RL, val16);
 
-				for (i=0; i<200; i++) // polling 200x10=2000 msec  
+				for (i=0; i<200; i++) // polling 200x10=2000 msec
 				{
 					reg_200 = rtw_read32(padapter, 0x200);
 					reg_204 = rtw_read32(padapter, 0x204);
@@ -6754,7 +6754,7 @@ _func_enter_;
 
 				if (reg_200 != reg_204)
 					DBG_871X("packets in tx buffer - 0x204=%x, 0x200=%x\n", reg_204, reg_200);
-				
+
 				RetryLimit = 0x30;
 				val16 = RetryLimit << RETRY_LIMIT_SHORT_SHIFT | RetryLimit << RETRY_LIMIT_LONG_SHIFT;
 				rtw_write16(padapter, REG_RL, val16);
@@ -6798,7 +6798,7 @@ _func_enter_;
 			{
 				val8 = rtw_read8(padapter,  REG_DWBCN1_CTRL_8703B+2);
 				val8 |= BIT(0);
-				rtw_write8(padapter, REG_DWBCN1_CTRL_8703B+2, val8); 
+				rtw_write8(padapter, REG_DWBCN1_CTRL_8703B+2, val8);
 			}
 			else
 #endif // CONFIG_CONCURRENT_MODE
@@ -6825,7 +6825,7 @@ _func_enter_;
 				// SW_BCN_SEL - Port0
 				val8 = rtw_read8(padapter, REG_DWBCN1_CTRL_8703B+2);
 				val8 &= ~BIT(4);
-				rtw_write8(padapter, REG_DWBCN1_CTRL_8703B+2, val8);	
+				rtw_write8(padapter, REG_DWBCN1_CTRL_8703B+2, val8);
 			}
 			break;
 
@@ -7167,7 +7167,7 @@ _func_exit_;
 #endif // CONFIG_C2H_PACKET_EN
 
 /*
- *	Description: 
+ *	Description:
  *		Query setting of specified variable.
  */
 u8 GetHalDefVar8703B(PADAPTER padapter, HAL_DEF_VARIABLE variable, void *pval)
@@ -7219,8 +7219,8 @@ u8 GetHalDefVar8703B(PADAPTER padapter, HAL_DEF_VARIABLE variable, void *pval)
 				u32 cmd;
 				u32 ra_info1, ra_info2;
 				u32 rate_mask1, rate_mask2;
-				u8 curr_tx_rate,curr_tx_sgi,hight_rate,lowest_rate;			
-				
+				u8 curr_tx_rate,curr_tx_sgi,hight_rate,lowest_rate;
+
 				DBG_8192C("============ RA status check  Mac_id:%d ===================\n", mac_id);
 
 				cmd = 0x40000100 | mac_id;
@@ -7230,7 +7230,7 @@ u8 GetHalDefVar8703B(PADAPTER padapter, HAL_DEF_VARIABLE variable, void *pval)
 				curr_tx_rate = ra_info1&0x7F;
 				curr_tx_sgi = (ra_info1>>7)&0x01;
 				DBG_8192C("[ ra_info1:0x%08x ] =>cur_tx_rate= %s,cur_sgi:%d, PWRSTS = 0x%02x  \n",
-					ra_info1,						
+					ra_info1,
 					HDATA_RATE(curr_tx_rate),
 					curr_tx_sgi,
 					(ra_info1>>8)  & 0x07);
@@ -7244,14 +7244,14 @@ u8 GetHalDefVar8703B(PADAPTER padapter, HAL_DEF_VARIABLE variable, void *pval)
 				rate_mask2 = rtw_read32(padapter, 0x2FC);
 				hight_rate = ra_info2&0xFF;
 				lowest_rate = (ra_info2>>8)  & 0xFF;
-					
+
 				DBG_8192C("[ ra_info1:0x%08x ] =>RSSI=%d, BW_setting=0x%02x, DISRA=0x%02x, VHT_EN=0x%02x\n",
 					ra_info1,
 					ra_info1&0xFF,
 					(ra_info1>>8)  & 0xFF,
 					(ra_info1>>16) & 0xFF,
 					(ra_info1>>24) & 0xFF);
-					
+
 				DBG_8192C("[ ra_info2:0x%08x ] =>hight_rate=%s, lowest_rate=%s, SGI=0x%02x, RateID=%d\n",
 					ra_info2,
 					HDATA_RATE(hight_rate),
@@ -7260,7 +7260,7 @@ u8 GetHalDefVar8703B(PADAPTER padapter, HAL_DEF_VARIABLE variable, void *pval)
 					(ra_info2>>24) & 0xFF);
 
 				DBG_8192C("rate_mask2=0x%08x, rate_mask1=0x%08x\n", rate_mask2, rate_mask1);
-				
+
 			}
 			break;
 
@@ -7356,7 +7356,7 @@ void rtl8703bs_free_checkbthang_workqueue(_adapter * adapter)
 		flush_workqueue(adapter->priv_checkbt_wq);
 		destroy_workqueue(adapter->priv_checkbt_wq);
 		adapter->priv_checkbt_wq = NULL;
-	} 
+	}
 }
 
 void rtl8703bs_cancle_checkbthang_workqueue(_adapter * adapter)

@@ -100,7 +100,7 @@ rtl8703bs_InitSwLeds(
 
 	pledpriv->SwLedOn = SwLedOn_8703BS;
 	pledpriv->SwLedOff = SwLedOff_8703BS;
-	
+
 	InitLed871x(padapter, &(pledpriv->SwLed0), LED_PIN_LED0);
 
 	InitLed871x(padapter,&(pledpriv->SwLed1), LED_PIN_LED1);

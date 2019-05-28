@@ -174,7 +174,7 @@ _func_exit_;
 u16 sdio_read16(struct intf_hdl *pintfhdl, u32 addr)
 {
 	u32 ftaddr;
-	u16 val;	
+	u16 val;
 
 _func_enter_;
 	ftaddr = _cvrt2ftaddr(addr, NULL, NULL);
@@ -831,7 +831,7 @@ s32 sdio_local_write(
 }
 
 u8 SdioLocalCmd52Read1Byte(PADAPTER padapter, u32 addr)
-{	
+{
 	u8 val = 0;
 	struct intf_hdl * pintfhdl=&padapter->iopriv.intf;
 
@@ -842,7 +842,7 @@ u8 SdioLocalCmd52Read1Byte(PADAPTER padapter, u32 addr)
 }
 
 u16 SdioLocalCmd52Read2Byte(PADAPTER padapter, u32 addr)
-{	
+{
 	u16 val = 0;
 	struct intf_hdl * pintfhdl=&padapter->iopriv.intf;
 
@@ -855,7 +855,7 @@ u16 SdioLocalCmd52Read2Byte(PADAPTER padapter, u32 addr)
 }
 
 u32 SdioLocalCmd52Read4Byte(PADAPTER padapter, u32 addr)
-{	
+{
 	u32 val = 0;
 	struct intf_hdl * pintfhdl=&padapter->iopriv.intf;
 
@@ -869,7 +869,7 @@ u32 SdioLocalCmd52Read4Byte(PADAPTER padapter, u32 addr)
 
 u32 SdioLocalCmd53Read4Byte(PADAPTER padapter, u32 addr)
 {
-	
+
 	u8 bMacPwrCtrlOn;
 	u32 val = 0;
 	struct intf_hdl * pintfhdl=&padapter->iopriv.intf;
@@ -1300,7 +1300,7 @@ u8 CheckIPSStatus(PADAPTER padapter)
 {
 	DBG_871X("%s(): Read 0x100=0x%02x 0x86=0x%02x\n", __func__,
 		rtw_read8(padapter, 0x100),rtw_read8(padapter, 0x86));
-	
+
 	if (rtw_read8(padapter, 0x100) == 0xEA)
 		return _TRUE;
 	else
@@ -1314,7 +1314,7 @@ void DisableInterruptButCpwm28703BSdio(PADAPTER padapter)
 
 	sdio_local_read(padapter, SDIO_REG_HIMR, 4, (u8*)&tmp);
 	DBG_871X("DisableInterruptButCpwm28703BSdio(): Read SDIO_REG_HIMR: 0x%08x\n", tmp);
-	
+
 	himr = cpu_to_le32(SDIO_HIMR_DISABLED)|SDIO_HIMR_CPWM2_MSK;
 	sdio_local_write(padapter, SDIO_REG_HIMR, 4, (u8*)&himr);
 
@@ -1639,7 +1639,7 @@ void sd_int_dpc(PADAPTER padapter)
 			_set_workitem(&padapter->evtpriv.c2h_wk);
 		}
 	}
-#endif	
+#endif
 
 	if (phal->sdio_hisr & SDIO_HISR_RXFOVW)
 	{
@@ -1772,7 +1772,7 @@ u8 HalQueryTxOQTBufferStatus8703BSdio(PADAPTER padapter)
 	return _TRUE;
 }
 
-#if defined(CONFIG_WOWLAN) || defined(CONFIG_AP_WOWLAN) 
+#if defined(CONFIG_WOWLAN) || defined(CONFIG_AP_WOWLAN)
 u8 RecvOnePkt(PADAPTER padapter, u32 size)
 {
 	struct recv_buf *precvbuf;

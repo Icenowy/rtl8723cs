@@ -143,7 +143,7 @@ _func_enter_;
 
 exit:
 
-	_exit_critical_mutex(&(adapter_to_dvobj(padapter)->h2c_fwcmd_mutex), NULL);	
+	_exit_critical_mutex(&(adapter_to_dvobj(padapter)->h2c_fwcmd_mutex), NULL);
 
 _func_exit_;
 
@@ -398,7 +398,7 @@ static void rtl8703b_set_FwRsvdPage_cmd(PADAPTER padapter, PRSVDPAGE_LOC rsvdpag
 {
 	u8 u1H2CRsvdPageParm[H2C_RSVDPAGE_LOC_LEN]={0};
 
-	DBG_871X("8703BRsvdPageLoc: ProbeRsp=%d PsPoll=%d Null=%d QoSNull=%d BTNull=%d\n",  
+	DBG_871X("8703BRsvdPageLoc: ProbeRsp=%d PsPoll=%d Null=%d QoSNull=%d BTNull=%d\n",
 		rsvdpageloc->LocProbeRsp, rsvdpageloc->LocPsPoll,
 		rsvdpageloc->LocNullData, rsvdpageloc->LocQosNull,
 		rsvdpageloc->LocBTQosNull);
@@ -408,7 +408,7 @@ static void rtl8703b_set_FwRsvdPage_cmd(PADAPTER padapter, PRSVDPAGE_LOC rsvdpag
 	SET_8703B_H2CCMD_RSVDPAGE_LOC_NULL_DATA(u1H2CRsvdPageParm, rsvdpageloc->LocNullData);
 	SET_8703B_H2CCMD_RSVDPAGE_LOC_QOS_NULL_DATA(u1H2CRsvdPageParm, rsvdpageloc->LocQosNull);
 	SET_8703B_H2CCMD_RSVDPAGE_LOC_BT_QOS_NULL_DATA(u1H2CRsvdPageParm, rsvdpageloc->LocBTQosNull);
-	
+
 	RT_PRINT_DATA(_module_hal_init_c_, _drv_always_, "u1H2CRsvdPageParm:", u1H2CRsvdPageParm, H2C_RSVDPAGE_LOC_LEN);
 	FillH2CCmd8703B(padapter, H2C_8703B_RSVD_PAGE, H2C_RSVDPAGE_LOC_LEN, u1H2CRsvdPageParm);
 }
@@ -418,10 +418,10 @@ static void rtl8703b_set_FwAoacRsvdPage_cmd(PADAPTER padapter, PRSVDPAGE_LOC rsv
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	u8	res = 0, count = 0;
-#ifdef CONFIG_WOWLAN	
+#ifdef CONFIG_WOWLAN
 	u8 u1H2CAoacRsvdPageParm[H2C_AOAC_RSVDPAGE_LOC_LEN]={0};
 
-	DBG_871X("8703BAOACRsvdPageLoc: RWC=%d ArpRsp=%d NbrAdv=%d GtkRsp=%d GtkInfo=%d ProbeReq=%d NetworkList=%d\n",  
+	DBG_871X("8703BAOACRsvdPageLoc: RWC=%d ArpRsp=%d NbrAdv=%d GtkRsp=%d GtkInfo=%d ProbeReq=%d NetworkList=%d\n",
 			rsvdpageloc->LocRemoteCtrlInfo, rsvdpageloc->LocArpRsp,
 			rsvdpageloc->LocNbrAdv, rsvdpageloc->LocGTKRsp,
 			rsvdpageloc->LocGTKInfo, rsvdpageloc->LocProbeReq,
@@ -461,7 +461,7 @@ static void rtl8703b_set_FwKeepAlive_cmd(PADAPTER padapter, u8 benable, u8 pkt_t
         u8 check_period = 10;
 #else
         u8 check_period = 5;
-#endif 
+#endif
 
 	DBG_871X("%s(): benable = %d\n", __func__, benable);
 	SET_8703B_H2CCMD_KEEPALIVE_PARM_ENABLE(u1H2CKeepAliveParm, benable);
@@ -496,7 +496,7 @@ void rtl8703b_set_FwMacIdConfig_cmd(_adapter* padapter, u8 mac_id, u8 raid, u8 b
 	u8 u1H2CMacIdConfigParm[H2C_MACID_CFG_LEN]={0};
 
 	DBG_871X("%s(): mac_id=%d raid=0x%x bw=%d mask=0x%x\n", __func__, mac_id, raid, bw, mask);
-	
+
 _func_enter_;
 
 	SET_8703B_H2CCMD_MACID_CFG_MACID(u1H2CMacIdConfigParm, mac_id);
@@ -514,15 +514,15 @@ _func_enter_;
 
 		if(pDM_OutSrc->bDisablePowerTraining){
 			SET_8703B_H2CCMD_MACID_CFG_DISPT(u1H2CMacIdConfigParm,1);
-			DBG_871X("%s,Disable PWT by DM\n",__FUNCTION__);	
+			DBG_871X("%s,Disable PWT by DM\n",__FUNCTION__);
 		}
-	}	
-		
+	}
+
 	SET_8703B_H2CCMD_MACID_CFG_RATE_MASK0(u1H2CMacIdConfigParm, (u8)(mask & 0x000000ff));
 	SET_8703B_H2CCMD_MACID_CFG_RATE_MASK1(u1H2CMacIdConfigParm, (u8)((mask & 0x0000ff00) >>8));
 	SET_8703B_H2CCMD_MACID_CFG_RATE_MASK2(u1H2CMacIdConfigParm, (u8)((mask & 0x00ff0000) >> 16));
 	SET_8703B_H2CCMD_MACID_CFG_RATE_MASK3(u1H2CMacIdConfigParm, (u8)((mask & 0xff000000) >> 24));
-	
+
 	RT_PRINT_DATA(_module_hal_init_c_, _drv_always_, "u1H2CMacIdConfigParm:", u1H2CMacIdConfigParm, H2C_MACID_CFG_LEN);
 	FillH2CCmd8703B(padapter, H2C_8703B_MACID_CFG, H2C_MACID_CFG_LEN, u1H2CMacIdConfigParm);
 
@@ -617,7 +617,7 @@ _func_enter_;
 		rlbm = 2;
 		awake_intvl = 4;
 		smart_ps = pwrpriv->smart_ps;
-	}	
+	}
 
 #ifdef CONFIG_P2P
 	if (!rtw_p2p_chk_state(wdinfo, P2P_STATE_NONE)) {
@@ -691,7 +691,7 @@ _func_enter_;
 
 				//DBG_871X("%s(): bcn_delay_cnt[%d]=%d, bcn_delay_ratio[%d] = %d\n", __func__, i, pmlmeext->bcn_delay_cnt[i]
 				//	,i ,pmlmeext->bcn_delay_ratio[i]);
-	
+
 				ratio_20_delay += pmlmeext->bcn_delay_ratio[i];
 				ratio_80_delay += pmlmeext->bcn_delay_ratio[i];
 
@@ -699,7 +699,7 @@ _func_enter_;
 				{
 					pmlmeext->DrvBcnEarly = i;
 					//DBG_871X("%s(): DrvBcnEarly = %d\n", __func__, pmlmeext->DrvBcnEarly);
-				}	
+				}
 
 				if(ratio_80_delay > 80 && pmlmeext->DrvBcnTimeOut == 0xff)
 				{
@@ -710,7 +710,7 @@ _func_enter_;
 				//reset adaptive_early_32k cnt
 				pmlmeext->bcn_delay_cnt[i] = 0;
 				pmlmeext->bcn_delay_ratio[i] = 0;
-			
+
 			}
 
 			pmlmeext->bcn_cnt = 0;
@@ -751,7 +751,7 @@ void rtl8703b_set_FwPsTuneParam_cmd(PADAPTER padapter)
 	u8 bcn_to_limit = 10; //10 * 100 * awakeinterval (ms)
 	u8 dtim_timeout = 5; //ms //wait broadcast data timer
 	u8 ps_timeout = 20;  //ms //Keep awake when tx
-	u8 dtim_period = 3; 
+	u8 dtim_period = 3;
 
 _func_enter_;
 	//DBG_871X("%s(): FW LPS mode = %d\n", __func__, psmode);
@@ -802,7 +802,7 @@ void rtl8703b_set_FwPwrModeInIPS_cmd(PADAPTER padapter, u8 cmd_param)
 static s32 rtl8703b_set_FwLowPwrLps_cmd(PADAPTER padapter, u8 enable)
 {
 	//TODO
-	return _FALSE;	
+	return _FALSE;
 }
 
 
@@ -871,7 +871,7 @@ _func_enter_;
 				rtw_hal_get_hwreg(padapter, HW_VAR_BCN_VALID, (u8*)(&bcn_valid));
 				poll++;
 			} while (!bcn_valid && (poll%10) != 0 && !RTW_CANNOT_RUN(padapter));
-			
+
 		} while (!bcn_valid && DLBcnCount <= 100 && !RTW_CANNOT_RUN(padapter));
 
 		if (RTW_CANNOT_RUN(padapter))
@@ -955,7 +955,7 @@ void rtl8703b_Add_RateATid(PADAPTER pAdapter, u64 rate_bitmap, u8 *arg, u8 rssi_
 	bw = psta->bw_mode;
 
 	if(rssi_level != DM_RATR_STA_INIT)
-		mask = ODM_Get_Rate_Bitmap(&pHalData->odmpriv, mac_id, mask, rssi_level);		
+		mask = ODM_Get_Rate_Bitmap(&pHalData->odmpriv, mac_id, mask, rssi_level);
 
 	DBG_871X("%s(): mac_id=%d raid=0x%x bw=%d mask=0x%x\n", __func__, mac_id, raid, bw, mask);
 	rtl8703b_set_FwMacIdConfig_cmd(pAdapter, mac_id, raid, bw, shortGI, mask);
@@ -1038,7 +1038,7 @@ static void ConstructBtNullFunctionData(
 static void SetFwRsvdPagePkt_BTCoex(PADAPTER padapter)
 {
 	PHAL_DATA_TYPE pHalData;
-	struct xmit_frame *pcmdframe;	
+	struct xmit_frame *pcmdframe;
 	struct pkt_attrib *pattrib;
 	struct xmit_priv *pxmitpriv;
 	struct mlme_ext_priv *pmlmeext;
@@ -1172,12 +1172,12 @@ void rtl8703b_download_BTCoex_AP_mode_rsvd_page(PADAPTER padapter)
 	// We should set AID, correct TSF, HW seq enable before set JoinBssReport to Fw in 88/92C.
 	// Suggested by filen. Added by tynli.
 	rtw_write16(padapter, REG_BCN_PSR_RPT, (0xC000|pmlmeinfo->aid));
-	
+
 	// set REG_CR bit 8
 	val8 = rtw_read8(padapter, REG_CR+1);
 	val8 |= BIT(0); // ENSWBCN
 	rtw_write8(padapter,  REG_CR+1, val8);
-	
+
 	// Disable Hw protection for a time which revserd for Hw sending beacon.
 	// Fix download reserved page packet fail that access collision with the protection time.
 	// 2010.05.11. Added by tynli.

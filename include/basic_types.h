@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -27,13 +27,13 @@
 #ifndef TRUE
 	#define _TRUE	1
 #else
-	#define _TRUE	TRUE	
+	#define _TRUE	TRUE
 #endif
-		
-#ifndef FALSE		
+
+#ifndef FALSE
 	#define _FALSE	0
 #else
-	#define _FALSE	FALSE	
+	#define _FALSE	FALSE
 #endif
 
 #ifdef PLATFORM_WINDOWS
@@ -46,7 +46,7 @@
 
 	typedef signed long s32;
 	typedef unsigned long u32;
-	
+
 	typedef unsigned int	uint;
 	typedef	signed int		sint;
 
@@ -55,7 +55,7 @@
 	typedef unsigned long long u64;
 
 	#ifdef NDIS50_MINIPORT
-	
+
 		#define NDIS_MAJOR_VERSION       5
 		#define NDIS_MINOR_VERSION       0
 
@@ -98,7 +98,7 @@
         #define UCHAR u8
 	#define USHORT u16
 	#define UINT u32
-	#define ULONG u32	
+	#define ULONG u32
 
 	#if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 19))
 		typedef _Bool bool;
@@ -106,10 +106,10 @@
 
 	typedef void (*proc_t)(void*);
 
-	typedef 	__kernel_size_t	SIZE_T;	
+	typedef 	__kernel_size_t	SIZE_T;
 	typedef	__kernel_ssize_t	SSIZE_T;
 	#define FIELD_OFFSET(s,field)	((SSIZE_T)&((s*)(0))->field)
-	
+
 #endif
 
 
@@ -123,7 +123,7 @@
 
 	typedef signed int s32;
 	typedef unsigned int u32;
-	
+
 	typedef unsigned int	uint;
 	typedef	signed int		sint;
 	typedef long atomic_t;
@@ -135,7 +135,7 @@
 	#define VOID void
 	#define NDIS_OID uint
 	#define NDIS_STATUS uint
-	
+
 	#ifndef	PVOID
 	typedef void * PVOID;
 	//#define PVOID	(void *)
@@ -144,17 +144,17 @@
     #define UCHAR u8
 	#define USHORT u16
 	#define UINT u32
-	#define ULONG u32	
+	#define ULONG u32
 
 	typedef void (*proc_t)(void*);
-  
+
   typedef unsigned int __kernel_size_t;
   typedef int __kernel_ssize_t;
-  
-	typedef 	__kernel_size_t	SIZE_T;	
+
+	typedef 	__kernel_size_t	SIZE_T;
 	typedef	__kernel_ssize_t	SSIZE_T;
 	#define FIELD_OFFSET(s,field)	((SSIZE_T)&((s*)(0))->field)
-	
+
 #endif
 
 #define MEM_ALIGNMENT_OFFSET	(sizeof (SIZE_T))

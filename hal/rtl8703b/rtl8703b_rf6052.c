@@ -124,7 +124,7 @@ phy_RF6052_Config_ParaFile(
 
 	static char			sz8703RadioAFile[] = RTL8703B_PHY_RADIO_A;
 	static char			sz8703RadioBFile[] = RTL8703B_PHY_RADIO_B;
-	static s1Byte 			sz8703BTxPwrTrackFile[] = RTL8703B_TXPWR_TRACK;	
+	static s1Byte 			sz8703BTxPwrTrackFile[] = RTL8703B_TXPWR_TRACK;
 	char					*pszRadioAFile, *pszRadioBFile, *pszTxPwrTrackFile;
 
 	pszRadioAFile = sz8703RadioAFile;
@@ -220,9 +220,9 @@ phy_RF6052_Config_ParaFile(
 	}
 
 	//3 -----------------------------------------------------------------
-	//3 Configuration of Tx Power Tracking 
+	//3 Configuration of Tx Power Tracking
 	//3 -----------------------------------------------------------------
-	
+
 #ifdef CONFIG_LOAD_PHY_PARA_FROM_FILE
 	if (PHY_ConfigRFWithTxPwrTrackParaFile(Adapter, pszTxPwrTrackFile) == _FAIL)
 #endif
@@ -231,7 +231,7 @@ phy_RF6052_Config_ParaFile(
 		ODM_ConfigRFWithTxPwrTrackHeaderFile(&pHalData->odmpriv);
 #endif
 	}
-	
+
 	//RT_TRACE(COMP_INIT, DBG_LOUD, ("<---phy_RF6052_Config_ParaFile()\n"));
 	return rtStatus;
 

@@ -263,17 +263,17 @@ static void Init_ODM_ComInfo_8703b(PADAPTER	Adapter)
 	#ifdef CONFIG_DISABLE_ODM
 	SupportAbility = 0;
 	#else
-	SupportAbility = 	
-#if 1	
+	SupportAbility =
+#if 1
 					ODM_RF_CALIBRATION |
-					ODM_RF_TX_PWR_TRACK	
+					ODM_RF_TX_PWR_TRACK
 #else
 					0
 #endif
-							;	
+							;
 	/*if(pHalData->AntDivCfg)
 		SupportAbility |= ODM_BB_ANT_DIV;*/
-	#endif	
+	#endif
 
 	ODM_CmnInfoUpdate(pDM_Odm,ODM_CMNINFO_ABILITY,SupportAbility);
 }
@@ -286,15 +286,15 @@ static void Update_ODM_ComInfo_8703b(PADAPTER	Adapter)
 
 	SupportAbility = 0
 		| ODM_BB_DIG 					/* For BB */
-		| ODM_BB_RA_MASK		
-		| ODM_BB_FA_CNT			
+		| ODM_BB_RA_MASK
+		| ODM_BB_FA_CNT
 		| ODM_BB_RSSI_MONITOR
-		| ODM_BB_CCK_PD		
-		| ODM_BB_CFO_TRACKING	
-		/* | ODM_BB_PWR_TRAIN */	
-		| ODM_BB_NHM_CNT	
+		| ODM_BB_CCK_PD
+		| ODM_BB_CFO_TRACKING
+		/* | ODM_BB_PWR_TRAIN */
+		| ODM_BB_NHM_CNT
 		 | ODM_RF_TX_PWR_TRACK	/* For RF */
-		 | ODM_RF_CALIBRATION 
+		 | ODM_RF_CALIBRATION
 		| ODM_MAC_EDCA_TURBO		/* For MAC */
 		;
 
@@ -408,12 +408,12 @@ if (Adapter->registrypriv.mp_mode == 1 && Adapter->mppriv.mp_dm ==0) // for MP p
 		u8	bsta_state=_FALSE;
 		u8	bBtDisabled = _TRUE;
 
-		if(rtw_linked_check(Adapter)){			
+		if(rtw_linked_check(Adapter)){
 			bLinked = _TRUE;
 			if (check_fwstate(&Adapter->mlmepriv, WIFI_STATION_STATE))
 				bsta_state = _TRUE;
 		}
-			
+
 #ifdef CONFIG_CONCURRENT_MODE
 		if(pbuddy_adapter && rtw_linked_check(pbuddy_adapter)){
 			bLinked = _TRUE;
@@ -452,7 +452,7 @@ skip_dm:
 
 void rtl8703b_hal_dm_in_lps(PADAPTER padapter)
 {
-	u32	PWDB_rssi=0;	
+	u32	PWDB_rssi=0;
 	struct mlme_priv 	*pmlmepriv = &padapter->mlmepriv;
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(padapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
@@ -471,9 +471,9 @@ void rtl8703b_hal_dm_in_lps(PADAPTER padapter)
 	if(psta && (psta->rssi_stat.UndecoratedSmoothedPWDB > 0))
 	{
 		PWDB_rssi = (psta->mac_id | (psta->rssi_stat.UndecoratedSmoothedPWDB<<16) );
-		
+
 		rtl8703b_set_rssi_cmd(padapter, (u8*)&PWDB_rssi);
-	}	
+	}
 
 }
 
@@ -511,9 +511,9 @@ void rtl8703b_HalDmWatchDog_in_LPS(IN	PADAPTER	Adapter)
 		goto skip_lps_dm;
 
 
-	//ODM_DMWatchdog(&pHalData->odmpriv);	
-	//Do DIG by RSSI In LPS-32K 
-	
+	//ODM_DMWatchdog(&pHalData->odmpriv);
+	//Do DIG by RSSI In LPS-32K
+
       //.1 Find MIN-RSSI
 	psta = rtw_get_stainfo(pstapriv, get_bssid(pmlmepriv));
 	if(psta == NULL)
@@ -531,16 +531,16 @@ void rtl8703b_HalDmWatchDog_in_LPS(IN	PADAPTER	Adapter)
 	pDM_Odm->RSSI_Min = pHalData->MinUndecoratedPWDBForDM;
 
 	//if(pDM_DigTable->CurIGValue != pDM_Odm->RSSI_Min)
-	if((pDM_DigTable->CurIGValue > pDM_Odm->RSSI_Min + 5) || 
+	if((pDM_DigTable->CurIGValue > pDM_Odm->RSSI_Min + 5) ||
              (pDM_DigTable->CurIGValue < pDM_Odm->RSSI_Min - 5))
 
-	{		
+	{
 #ifdef CONFIG_LPS
-		rtw_dm_in_lps_wk_cmd(Adapter);		
+		rtw_dm_in_lps_wk_cmd(Adapter);
 #endif /* CONFIG_LPS */
 	}
-	
-	
+
+
 skip_lps_dm:
 
 	return;

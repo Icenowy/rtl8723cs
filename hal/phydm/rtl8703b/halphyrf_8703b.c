@@ -234,7 +234,7 @@ ODM_TxPwrTrackSetPwr_8703B(
 	u1Byte		Final_CCK_Swing_Index = 0;
 	u1Byte		i = 0;
 	PODM_RF_CAL_T	pRFCalibrateInfo = &(pDM_Odm->RFCalibrateInfo);
-	
+
 #if (DM_ODM_SUPPORT_TYPE & (ODM_WIN))
 #if (MP_DRIVER == 1)	/*win MP */
 	PMPT_CONTEXT			pMptCtx = &(Adapter->MptCtx);
@@ -491,24 +491,24 @@ GetDeltaSwingTable_8703B(
 	u1Byte			TxRate			= 0xFF;
 	u1Byte			channel 		 = pHalData->CurrentChannel;
 
-	
+
 	if (pDM_Odm->mp_mode == TRUE) {
 	#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 		#if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
 			#if (MP_DRIVER == 1)
 					PMPT_CONTEXT pMptCtx = &(Adapter->MptCtx);
-					
+
 					TxRate = MptToMgntRate(pMptCtx->MptRateIndex);
 			#endif
 		#elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
 				PMPT_CONTEXT pMptCtx = &(Adapter->mppriv.MptCtx);
-				
+
 				TxRate = MptToMgntRate(pMptCtx->MptRateIndex);
-		#endif	
+		#endif
 	#endif
 	} else {
 		u2Byte	rate	 = *(pDM_Odm->pForcedDataRate);
-		
+
 		if (!rate) { /*auto rate*/
 			if (rate != 0xFF) {
 			#if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
@@ -521,7 +521,7 @@ GetDeltaSwingTable_8703B(
 			TxRate = (u1Byte)rate;
 		}
 	}
-		
+
 	ODM_RT_TRACE(pDM_Odm, ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD, ("Power Tracking TxRate=0x%X\n", TxRate));
 
 	if ( 1 <= channel && channel <= 14) {
@@ -616,7 +616,7 @@ phy_PathA_IQK_8703B(
 
 	/*PA, PAD setting*/
 	ODM_SetRFReg(pDM_Odm, ODM_RF_PATH_A, 0xdf, 0x800, 0x1);
-	ODM_SetRFReg(pDM_Odm, ODM_RF_PATH_A, 0x55, 0x0007f, 0x7);	
+	ODM_SetRFReg(pDM_Odm, ODM_RF_PATH_A, 0x55, 0x0007f, 0x7);
 	ODM_SetRFReg(pDM_Odm, ODM_RF_PATH_A, 0x7f, bRFRegOffsetMask, 0x0d400);
 
 	/*enter IQK mode*/
@@ -853,7 +853,7 @@ phy_PathA_RxIQK8703B(
 
 	/*PA, PAD setting*/
 	ODM_SetRFReg(pDM_Odm, ODM_RF_PATH_A, 0xdf, 0x800, 0x1);
-	ODM_SetRFReg(pDM_Odm, ODM_RF_PATH_A, 0x55, 0x0007f, 0x5);	
+	ODM_SetRFReg(pDM_Odm, ODM_RF_PATH_A, 0x55, 0x0007f, 0x5);
 
 	/*enter IQK mode*/
 	ODM_SetBBReg(pDM_Odm, rFPGA0_IQK, 0xffffff00, 0x808000);
@@ -1155,7 +1155,7 @@ ODM_SetIQCbyRFpath_8703B(
 		ODM_SetBBReg(pDM_Odm, pRFCalibrateInfo->RxIQC_8703B[IDX_0xC14][KEY], bMaskDWord, pRFCalibrateInfo->RxIQC_8703B[IDX_0xC14][VAL]);
 		ODM_SetBBReg(pDM_Odm, pRFCalibrateInfo->RxIQC_8703B[IDX_0xCA0][KEY], bMaskDWord, pRFCalibrateInfo->RxIQC_8703B[IDX_0xCA0][VAL]);
 		return TRUE;
-		
+
 	} else {
 		ODM_RT_TRACE(pDM_Odm, ODM_COMP_CALIBRATION, ODM_DBG_LOUD,  ("[IQK]IQC value invalid!!!\n"));
 		return FALSE;
@@ -1248,9 +1248,9 @@ _PHY_SaveMACRegisters8703B(
 #endif
 #endif
 //	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("Save MAC parameters.\n"));
-	for (i = 0; i < (IQK_MAC_REG_NUM - 1); i++) 
+	for (i = 0; i < (IQK_MAC_REG_NUM - 1); i++)
 		MACBackup[i] = ODM_Read1Byte(pDM_Odm, MACReg[i]);
-	
+
 	MACBackup[i] = ODM_Read4Byte(pDM_Odm, MACReg[i]);
 
 }
@@ -1280,9 +1280,9 @@ _PHY_ReloadADDARegisters8703B(
 #endif
 
 //	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("Reload ADDA power saving parameters !\n"));
-	for (i = 0 ; i < RegiesterNum; i++) 
+	for (i = 0 ; i < RegiesterNum; i++)
 		ODM_SetBBReg(pDM_Odm, ADDAReg[i], bMaskDWord, ADDABackup[i]);
-	
+
 }
 
 VOID
@@ -1371,7 +1371,7 @@ _PHY_MACSettingCalibration8703B(
 
 	ODM_Write1Byte(pDM_Odm, MACReg[i], 0x3F);
 
-	for (i = 1 ; i < (IQK_MAC_REG_NUM - 1); i++) 
+	for (i = 1 ; i < (IQK_MAC_REG_NUM - 1); i++)
 		ODM_Write1Byte(pDM_Odm, MACReg[i], (u1Byte)(MACBackup[i]&(~BIT3)));
 
 	ODM_Write1Byte(pDM_Odm, MACReg[i], (u1Byte)(MACBackup[i]&(~BIT5)));
@@ -1695,7 +1695,7 @@ phy_IQCalibrate_8703B(
 				result[t][6] = (ODM_GetBBReg(pDM_Odm, rRx_Power_Before_IQK_A_2, bMaskDWord)&0x3FF0000)>>16;
 				result[t][7] = (ODM_GetBBReg(pDM_Odm, rRx_Power_After_IQK_A_2, bMaskDWord)&0x3FF0000)>>16;
 				break;
-				
+
 			} else
 				ODM_RT_TRACE(pDM_Odm, ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("[IQK]S0 Rx IQK Fail!!\n"));
 
@@ -1900,7 +1900,7 @@ PHY_IQCalibrate_8703B(
 
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_CE)
-	if (!(pDM_Odm->SupportAbility & ODM_RF_CALIBRATION)) 
+	if (!(pDM_Odm->SupportAbility & ODM_RF_CALIBRATION))
 		return;
 
 #endif
@@ -1977,7 +1977,7 @@ PHY_IQCalibrate_8703B(
 			count++;
 		}
 
-		if (count >= 1000) 
+		if (count >= 1000)
 			RT_TRACE(COMP_INIT, DBG_LOUD, ("[IQK]Polling 0x1e6 to 1 for WiFi calibration H2C cmd FAIL! count(%d)", count));
 
 
@@ -2144,7 +2144,7 @@ PHY_IQCalibrate_8703B(
 			count++;
 		}
 
-		if (count >= 1000) 
+		if (count >= 1000)
 			RT_TRACE(COMP_INIT, DBG_LOUD, ("[IQK]Polling 0x1e6 to 0 for WiFi calibration H2C cmd FAIL! count(%d)", count));
 
 #endif
@@ -2200,7 +2200,7 @@ PHY_LCCalibrate_8703B(
 #endif
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_CE)
-	if (!(pDM_Odm->SupportAbility & ODM_RF_CALIBRATION)) 
+	if (!(pDM_Odm->SupportAbility & ODM_RF_CALIBRATION))
 		return;
 
 #endif

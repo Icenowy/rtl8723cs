@@ -29,7 +29,7 @@
 #define	BT_8723B_1ANT_ANTDET_PSDTHRES_2ANT_GOODISOLATION			55
 #define	BT_8723B_1ANT_ANTDET_PSDTHRES_1ANT							32
 #define	BT_8723B_1ANT_ANTDET_RETRY_INTERVAL							10	/* retry timer if ant det is fail, unit: second */
-#define	BT_8723B_1ANT_ANTDET_SWEEPPOINT_DELAY							40000  
+#define	BT_8723B_1ANT_ANTDET_SWEEPPOINT_DELAY							40000
 #define	BT_8723B_1ANT_ANTDET_ENABLE										1
 #define	BT_8723B_1ANT_ANTDET_COEXMECHANISMSWITCH_ENABLE				1
 #define	BT_8723B_1ANT_ANTDET_BTTXTIME									100
@@ -168,7 +168,7 @@ struct coex_sta_8723b_1ant {
 	u32					crc_ok_11g;
 	u32					crc_ok_11n;
 	u32					crc_ok_11n_agg;
-	
+
 	u32					crc_err_cck;
 	u32					crc_err_11g;
 	u32					crc_err_11n;
@@ -211,7 +211,7 @@ struct psdscan_sta_8723b_1ant {
 	u32			real_cent_freq;
 	s32			real_offset;
 	u32			real_span;
-	
+
 	u32			psd_band_width;  /* unit: Hz */
 	u32			psd_point;		/* 128/256/512/1024 */
 	u32			psd_report[1024];  /* unit:dB (20logx), 0~255 */
