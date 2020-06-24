@@ -3029,16 +3029,45 @@ int proc_get_ps_info(struct seq_file *m, void *v)
 	DBG_871X_SEL_NL(m, "------------------------------\n");
 	DBG_871X_SEL_NL(m, "*LPS:\n");
 
-	if (lps_mode == PS_MODE_ACTIVE) {
+	switch (lps_mode) {
+	case PS_MODE_ACTIVE:
 		str = "NO LPS";
-	} else if (lps_mode == PS_MODE_MIN) {
+		break;
+	case PS_MODE_MIN:
 		str = "MIN";
-	} else if (lps_mode == PS_MODE_MAX) {
+		break;
+	case PS_MODE_MAX:
 		str = "MAX";
-	} else if (lps_mode == PS_MODE_DTIM) {
+		break;
+	case PS_MODE_DTIM:
 		str = "DTIM";
-	} else {
-		sprintf(str, "%d", lps_mode);
+		break;
+	case PS_MODE_VOIP:
+		str = "VOIP";
+		break;
+	case PS_MODE_UAPSD_WMM:
+		str = "UAPSD_WMM";
+		break;
+	case PS_MODE_UAPSD:
+		str = "UAPSD";
+		break;
+	case PS_MODE_IBSS:
+		str = "IBSS";
+		break;
+	case PS_MODE_WWLAN:
+		str = "WWLAN";
+		break;
+	case PM_Radio_Off:
+		str = "Radio_Off";
+		break;
+	case PM_Card_Disable:
+		str = "Card_Disable";
+		break;
+	case PS_MODE_NUM:
+		str = "NUM";
+		break;
+	default:
+		str = "Unknown";
 	}
 
 	DBG_871X_SEL_NL(m, " LPS mode: %s\n", str);
